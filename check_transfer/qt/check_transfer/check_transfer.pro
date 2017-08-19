@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     ../shared/table_engine_console.cpp \
     ../shared/tf_testthread.cpp \
     ../shared/ipc.cpp \
-    tf_checktransfer.cpp
+    tf_checktransferout.cpp \
+    ../shared/xcl2.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -40,7 +41,9 @@ HEADERS += \
     ../shared/tf_test.h \
     ../shared/tf_testthread.h \
     ../shared/ipc.h \
-    tf_checktransfer.h
+    tf_checktransferout.h \
+    ../shared/utypes.h \
+    ../shared/xcl2.hpp
 # host compiler global settings
 #CXXFLAGS += -DSDX_PLATFORM=$(SDX_PLATFORM) -D__USE_XOPEN2K8 -I/opt/Xilinx/SDx/2017.1/runtime/include/1_2/ -I/opt/Xilinx/SDx/2017.1/Vivado_HLS/include/ -O2 -Wall -c -fmessage-length=0 -std=c++14
 #LDFLAGS += -lxilinxopencl -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64

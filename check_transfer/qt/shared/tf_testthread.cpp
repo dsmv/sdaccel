@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+
+#include "exceptinfo.h"
 
 #include "tf_testthread.h"
 
@@ -24,6 +27,7 @@ TF_TestThread::TF_TestThread( TableEngine  *pTable, int argc, char **argv) : TF_
     m_isComplete=0;
     m_isTerminate=0;
     m_CycleCnt=0;
+    m_isException=0;
 
     pthread_mutex_init(&m_ResultStartMutex, 0);
     pthread_mutex_init(&m_ResultCompleteMutex, 0);
@@ -34,7 +38,8 @@ TF_TestThread::TF_TestThread( TableEngine  *pTable, int argc, char **argv) : TF_
     pthread_mutex_lock(&m_ResultStartMutex);
     pthread_mutex_lock(&m_ResultCompleteMutex);
     pthread_mutex_lock(&m_StartMutex);
-    pthread_mutex_lock(&m_ThreadExitMutex);
+    //pthread_mutex_lock(&m_ThreadExitMutex);
+
 }
 
 
@@ -75,6 +80,10 @@ int TF_TestThread::Prepare(int cnt)
 
     int ret=m_isPrepareComplete;
 
+    if( m_isException )
+    {
+        throw except_info( "%s - exception during execute", __FUNCTION__ );
+    }
     return ret;
 }
 
@@ -93,34 +102,57 @@ void* TF_TestThread::ThreadFunc(void* lpvThreadParm)
 
 void* TF_TestThread::Execute()
 {
-    PrepareInThread();
+    try
+    {
+        pthread_mutex_lock(&m_ThreadExitMutex);
 
-    m_isPrepareComplete = 1;
+        PrepareInThread();
 
-    // Sleep here while TF_TestThread::Start() will be called in another thread
-    pthread_mutex_lock(&m_StartMutex);
 
-    //fprintf(stderr, "TF_TestThread::%s(): ID - %ld (START)\n", __FUNCTION__, pthread_self());
+        m_isPrepareComplete = 1;
 
-    // Working forever while m_isTerminate == 0
-    Run();
+        // Sleep here while TF_TestThread::Start() will be called in another thread
+        pthread_mutex_lock(&m_StartMutex);
 
-    m_isComplete = 1;
+        //fprintf(stderr, "TF_TestThread::%s(): ID - %ld (START)\n", __FUNCTION__, pthread_self());
 
-    // Wait while TF_TestThread::GetResult() will be called
-    pthread_mutex_lock( &m_ResultStartMutex );
+        // Working forever while m_isTerminate == 0
+        Run();
 
-    GetResultInThread();
+        m_isComplete = 1;
 
-    // Unlock mutex for complete GetResult() execution
-    pthread_mutex_unlock(&m_ResultCompleteMutex);
+        // Wait while TF_TestThread::GetResult() will be called
+        pthread_mutex_lock( &m_ResultStartMutex );
 
-    CleanupInThread();
+        GetResultInThread();
 
-    // Unlock mutex for complete TF_TestThread::~TF_TestThread() execution
-    pthread_mutex_unlock(&m_ThreadExitMutex);
+        // Unlock mutex for complete GetResult() execution
+        pthread_mutex_unlock(&m_ResultCompleteMutex);
 
-    //fprintf(stderr, "TF_TestThread::%s(): ID - %ld (COMPLETE)\n", __FUNCTION__, pthread_self());
+        CleanupInThread();
+
+        // Unlock mutex for complete TF_TestThread::~TF_TestThread() execution
+        pthread_mutex_unlock(&m_ThreadExitMutex);
+
+        //fprintf(stderr, "TF_TestThread::%s(): ID - %ld (COMPLETE)\n", __FUNCTION__, pthread_self());
+
+    }
+    catch( except_info_t err )
+    {
+        printf( "\n\n\n\n\n\n\n                \n Error in thread:\n%s\n                 \n", err.info.c_str());
+        m_isComplete = 1;
+        m_isException = 1;
+        pthread_mutex_unlock(&m_ThreadExitMutex);
+    }
+
+    catch( ... )
+    {
+        printf( "\n\n\n                \n Unknow error in thread\n                 \n" );
+        m_isComplete = 1;
+        m_isException = 1;
+        pthread_mutex_unlock(&m_ThreadExitMutex);
+
+    }
 
     return 0;
 }
@@ -188,7 +220,7 @@ void TF_TestThread::GetResultInThread()
  * 	\param	argc		number of argument
  * 	\param	argv		pointers to arguments
  * 	\param	name		key of argument
- * 	\parma	defValue	default value for arguments
+ * 	\param	defValue	default value for arguments
  *
  * 	\return   value of argument or default value of argument
  */

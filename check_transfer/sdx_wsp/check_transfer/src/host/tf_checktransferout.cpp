@@ -34,8 +34,8 @@ struct TF_CheckTransferOut_task_data {
     time_t  startTime;
     time_t  currentTime;
 
-    U32     dataOut;        //!< current data for output
-    U32     dataExpect;      //!< expect data from input
+    cl_ulong  dataOut;        //!< current data for output
+    cl_ulong  dataExpect;      //!< expect data from input
 
 //    xcl_world   xcl;        //!< OpenCL enviropment for device
 //    cl_program  program;    //!< OpenCL programm
@@ -44,11 +44,6 @@ struct TF_CheckTransferOut_task_data {
     char *xclbinFileName;   //!< file name for container
     char *kernelName;       //!< kernel name
 
-//    cl::Device  *pDevice;
-//    cl::Context *pContext;
-//    cl::Program *pProgram;
-//    cl::Kernel  *pKrnl;
-
     cl::Device  device;
     cl::Context context;
     cl::Program program;
@@ -56,9 +51,13 @@ struct TF_CheckTransferOut_task_data {
 
     std::string deviceName;
 
-    U32 *pBufOut[2];
+    U32 *pBufOut[2];				//!< pointers to buffers in the host memory
 
-    cl::Buffer      *pBuffer[2];
+    cl::Buffer      *pBuffer[2];	//!< pointers to buffers in the device memory
+
+    cl::Buffer		*dpStatus;		//!< pointer to status buffer in the device memory
+
+    U32	*pStatus;					//!< pointer to status buffer in the host memory
 
     TF_CheckTransferOut_task_data()
     {
@@ -75,7 +74,7 @@ struct TF_CheckTransferOut_task_data {
 
       xclbinFileName = new char[256];
 
-      kernelName = "bandwidth";
+      kernelName = "check_cnt";
 
 
 /*      pDevice  = NULL;
@@ -89,6 +88,9 @@ struct TF_CheckTransferOut_task_data {
 
       pBuffer[0]=NULL;
       pBuffer[1]=NULL;
+
+      pStatus = NULL;
+      dpStatus = NULL;
     };
 
     ~TF_CheckTransferOut_task_data()
@@ -144,9 +146,11 @@ TF_CheckTransferOut::~TF_CheckTransferOut()
 
     free( td->pBufOut[0] ); td->pBufOut[0]=NULL;
     free( td->pBufOut[1] ); td->pBufOut[1]=NULL;
+    free( td->pStatus );	td->pStatus=NULL;
 
     delete td->pBuffer[0]; td->pBuffer[0]=NULL;
     delete td->pBuffer[1]; td->pBuffer[1]=NULL;
+    delete td->dpStatus;  td->dpStatus=NULL;
 
 
     delete td; td=NULL;
@@ -163,33 +167,9 @@ void TF_CheckTransferOut::PrepareInThread()
     printf( "\n\n\n\n"); //FIXME - it is need for output under table
     printf( "%s\n\n", __FUNCTION__ );
 
-    //throw except_info( "%s - check ", __FUNCTION__ );
-
-//    printf( "Open device\n");
-//    td->xcl = xcl_world_single();
-//    printf( "Device: %s\n", td->xcl.device_name );
-
-//    printf( "Start load file \n");
-//    td->program = xcl_import_binary_file( td->xcl, td->xclbinFileName );
-//    printf( "load Ok \n");
-
-//    printf( "Get kernel: %s\n", td->kernelName );
-//    td->kernel = xcl_get_kernel( td->program, td->kernelName );
-//    printf( "Get kernel - Ok\n");
-
- //   td->xcl.command_queue
-    //cl::CommandQueue q;
 
     printf( "Open device\n");
     std::vector<cl::Device> devices = xcl::get_xil_devices();
-    //cl::Device device = devices[0];
-//    td->pDevice = new  cl::Device();
-//    *(td->pDevice) = devices[0];
-//    std::string name = td->pDevice->getInfo<CL_DEVICE_NAME>();
-//    //td->pDevice->getInfo( , &name );
-//    printf( "Device: %s\n", name.c_str());
-
-//    td->pContext = new cl::Context( *(td->pDevice));
 
     td->device = devices[0];
     td->deviceName = td->device.getInfo<CL_DEVICE_NAME>();
@@ -229,6 +209,14 @@ void TF_CheckTransferOut::PrepareInThread()
 
         printf( "ptr=%p\n", ptr );
 
+
+
+        err = posix_memalign( &ptr, 4096, 4096 );
+        if( err )
+            except_info( "%s - ошибка выделения памяти ");
+        td->pStatus = (U32*) ptr;
+
+
     }
     printf( " - Ok\n" );
 
@@ -266,6 +254,24 @@ void TF_CheckTransferOut::PrepareInThread()
                                );
         td->pBuffer[1] = pBuf;
     }
+
+    {
+        cl::Buffer *pBuf;
+
+        cl_mem_ext_ptr_t input_buffer_ext;
+
+        input_buffer_ext.flags = XCL_MEM_DDR_BANK0;
+        input_buffer_ext.obj = NULL;
+        input_buffer_ext.param = 0;
+
+        pBuf = new cl::Buffer( td->context,
+                               CL_MEM_READ_WRITE | CL_MEM_EXT_PTR_XILINX,
+                               4096,
+                               &input_buffer_ext
+                               );
+        td->dpStatus = pBuf;
+    }
+
     printf( " - Ok\n" );
 
 }
@@ -286,7 +292,7 @@ void TF_CheckTransferOut::GetResultInThread()
 
 }
 
-//! Show table durint test executing
+//! Show table during test executing
 void TF_CheckTransferOut::StepTable()
 {
     m_pTemplateEngine->SetValueTable( td->RowNumber, 1, (unsigned)td->BlockWr );
@@ -313,31 +319,35 @@ void TF_CheckTransferOut::Run()
     td->startTime = time(NULL);
 
     cl::CommandQueue q(td->context, td->device );
-    cl::Event eventCompletion0;
-    cl::Event eventCompletion1;
-    cl::Event eventCompletion2;
-    cl::Event eventCompletion3;
+    cl::Event eventCompletionTransfer0;
+    cl::Event eventCompletionTransfer1;
+    cl::Event eventCompletionExecuting0;
+    cl::Event eventCompletionExecuting1;
     cl_int ret;
+    cl_int sizeOfuint16 = td->sizeBlock/8;
+    cl_ulong8	arrayExpect;
+
+    std::vector<cl::Event>  events0;
 
     int flag_wait=0;
 
-    for( ; ; )
+    //for( ; ; )
     {
-        if( this->m_isTerminate )
-            break;
+        //if( this->m_isTerminate )
+            //break;
 
-//        td->BlockRd++;
 
-//        IPC_delay( 200 );
-
-        //SetBuffer( td->pBufOut[0] );
+        SetBuffer( td->pBufOut[0] );
         {
-            //cl::CommandQueue q(td->context, td->device, CL_QUEUE_PROFILING_ENABLE);
 
             if( flag_wait)
-             ret = eventCompletion0.wait();
+            {
+             ret = eventCompletionExecuting0.wait();
+
+            }
 
             SetBuffer( td->pBufOut[0] );
+            td->BlockWr++;
 
             ret=q.enqueueWriteBuffer(
                     *(td->pBuffer[0]),
@@ -346,46 +356,66 @@ void TF_CheckTransferOut::Run()
                     td->sizeBlock,
                     td->pBufOut[0],
                     NULL,
-                    &eventCompletion0
+                    &eventCompletionTransfer0
                     );
 
-            //ret = eventCompletion0.wait();
-//            //q.flush();
-//            q.finish();
+            for( int jj=0; jj<89; jj++ )
+            {
+            	arrayExpect.s[jj]=jj*2;
+            }
 
-//        }
-//        {
-//            cl_int ret;
-//            cl::CommandQueue q(td->context, td->device );
+            td->krnl.setArg( 0, *(td->pBuffer[0]) );
+            td->krnl.setArg( 1, *(td->dpStatus) );
+            td->krnl.setArg( 2, arrayExpect );
+            td->krnl.setArg( 3, sizeOfuint16 );
 
-            if( flag_wait)
-             ret = eventCompletion1.wait();
+            events0.clear();
+            //events0.push( eventCompletionTransfer0 );
 
-            SetBuffer( td->pBufOut[1] );
+            cl::NDRange globalNDR(1,1,1);
+            cl::NDRange localNDR(1,1,1);
 
-            ret=q.enqueueWriteBuffer(
-                    *(td->pBuffer[1]),
-                    CL_FALSE,
-                    0,
-                    td->sizeBlock,
-                    td->pBufOut[1],
-                    NULL,
-                    &eventCompletion1
-                    );
+//            q.enqueueNDRangeKernel(
+//            		td->krnl,
+//					cl::NDRange(0,0,0),
+//					globalNDR,
+//					localNDR,
+//					//&events0,
+//					NULL,
+//					&eventCompletionExecuting0
+//
+//					);
 
 
-            //q.flush();
-//            q.finish();
+            eventCompletionExecuting0.wait();
+            q.enqueueTask( td->krnl );
+//
+//            if( flag_wait)
+//             ret = eventCompletion1.wait();
+//
+//            SetBuffer( td->pBufOut[1] );
+//            td->BlockWr++;
+//
+//            ret=q.enqueueWriteBuffer(
+//                    *(td->pBuffer[1]),
+//                    CL_FALSE,
+//                    0,
+//                    td->sizeBlock,
+//                    td->pBufOut[1],
+//                    NULL,
+//                    &eventCompletion1
+//                    );
+//
 
             //CheckBuffer( td->pBufOut[1] );
 
             flag_wait=1;
 
-            if( CL_SUCCESS !=ret )
-                td->BlockError++;
+//            if( CL_SUCCESS !=ret )
+//                td->BlockError++;
         }
-        td->BlockWr++;
 
+        //eventCompletionExecuting0.wait();
 
         clock_t currentTick = clock();
         clock_t diff = currentTick - td->lastTick;
@@ -420,10 +450,10 @@ void TF_CheckTransferOut::Run()
 //! set test data in buffer
 void TF_CheckTransferOut::SetBuffer( U32 *ptr )
 {
-    U32 *dst = ptr;
-    U32 count = td->sizeBlock / sizeof(U32) / 16;
-    U32 val=td->dataOut;
-    for( int ii=0; ii<count; ii++ )
+	cl_ulong *dst = (cl_ulong*) ptr;
+    cl_uint count = td->sizeBlock / sizeof(cl_ulong) / 16;
+    cl_ulong val=td->dataOut;
+    for( cl_uint ii=0; ii<count; ii++ )
     {
         *dst++=val++;
         *dst++=val++;
@@ -448,11 +478,11 @@ void TF_CheckTransferOut::SetBuffer( U32 *ptr )
 //! check data in the buffer
 void TF_CheckTransferOut::CheckBuffer( U32 *ptr )
 {
-    U32 *src = ptr;
+	cl_ulong *src = (cl_ulong*)ptr;
     U32 count = td->sizeBlock / sizeof(U32);
-    U32 val=td->dataExpect;
-    U32 di;
-    U32 flag_error=0;
+    cl_ulong val=td->dataExpect;
+    cl_ulong di;
+    cl_ulong flag_error=0;
     for( int ii=0; ii<count; ii++ )
     {
         //di = *src++;

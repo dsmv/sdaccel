@@ -46,6 +46,7 @@ public:
 	int	m_isComplete;
 	int m_isTerminate;
 	int	m_CycleCnt;
+    int m_isException;
 
     pthread_mutex_t		m_ResultStartMutex;
     pthread_mutex_t		m_ResultCompleteMutex;

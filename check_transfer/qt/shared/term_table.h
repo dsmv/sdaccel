@@ -33,7 +33,7 @@
 #define B_CYAN		46
 #define B_WHITE		47
 
-#define CELL_WIDTH   15
+#define CELL_WIDTH   14
 #define CELL_HEIGHT  2
 
 //------------------------------------------------------------------------------

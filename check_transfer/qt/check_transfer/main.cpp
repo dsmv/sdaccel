@@ -9,7 +9,7 @@
 #include "exceptinfo.h"
 #include "table_engine_console.h"
 
-#include "tf_checktransfer.h"
+#include "tf_checktransferout.h"
 
 static volatile int exit_flag = 0;
 
@@ -24,7 +24,8 @@ int main(int argc, char **argv)
     int Y = 0;
 
     const char *headers[] = {
-        "NAME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR", "STATUS", "OTHER",
+        //"NAME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR", "STATUS", "OTHER",
+        "NAME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR",
     };
 
     TableEngine  *pTable = new TableEngineConsole();
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
     try {
 
 
-        TF_CheckTransfer *pTest = new TF_CheckTransfer( pTable, argc, argv );
+        TF_CheckTransferOut *pTest = new TF_CheckTransferOut( pTable, argc, argv );
 
         for( int ii=0; ; ii++) {
 			if( pTest->Prepare(ii) )
@@ -95,6 +96,13 @@ int main(int argc, char **argv)
             //pTable->SetValueTable(1,1,"%d : %d", 1,count);
             //pTable->SetValueTable(2,2,"%d : %d", 2,count);
             ++count;
+
+            if( IPC_kbhit() )
+            {
+                int key = IPC_getch();
+                if( 27==key )
+                    break;
+            }
 		}
 
         // Восстановим координаты курсора для того, чтобы
@@ -106,9 +114,9 @@ int main(int argc, char **argv)
 		delete pTest; pTest=NULL;
 
     } catch(except_info_t& err) {
-        fprintf(stderr, "%s\n", err.info.c_str());
+        printf( "\n\n\n\n             \n%s\n", err.info.c_str());
     } catch( ... ) {
-        fprintf(stderr, "Unknown error in application!\n");
+        printf( "Unknown error in application!\n");
 	}
 
     delete pTable;
