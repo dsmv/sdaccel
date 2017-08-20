@@ -12,8 +12,6 @@ void check_cnt(__global ulong8    * __restrict input0,
 			  )
 {
 
-//	   const 	ulong expect=1;
-//	   const 	uint  size=1024;
 
     ulong 	ii;
     uint  	flagError=0;
@@ -22,7 +20,6 @@ void check_cnt(__global ulong8    * __restrict input0,
     uint	blockError;
 
     ulong8 	temp0, temp1;
-    //ulong	temp_expect=expect;
 
     uint16	checkStatus;
 
@@ -45,26 +42,26 @@ void check_cnt(__global ulong8    * __restrict input0,
 
     temp1 = expect;
 
-    printf( "krnl:  input0=%p\n", input0 );
-    printf( "krnl:  pStatus=%p\n", pStatus);
-    printf( "krnl:  size=%d\n", size);
-
-    //for( int ii=0; ii<8; ii++ )
-    	printf( "krnl:  expect(%d)= %ld\n", 0, temp1.s0 );
-    	printf( "krnl:  expect(%d)= %ld\n", 1, temp1.s1 );
-    	printf( "krnl:  expect(%d)= %ld\n", 2, temp1.s2 );
-    	printf( "krnl:  expect(%d)= %ld\n", 3, temp1.s3 );
-    	printf( "krnl:  expect(%d)= %ld\n", 4, temp1.s4 );
-    	printf( "krnl:  expect(%d)= %ld\n", 5, temp1.s5 );
-    	printf( "krnl:  expect(%d)= %ld\n", 6, temp1.s6 );
-    	printf( "krnl:  expect(%d)= %ld\n", 7, temp1.s7 );
-
-
-//    __attribute__((xcl_pipeline_loop))
+//    printf( "krnl:  input0=%p\n", input0 );
+//    printf( "krnl:  pStatus=%p\n", pStatus);
+//    printf( "krnl:  size=%d\n", size);
 //
+//    //for( int ii=0; ii<8; ii++ )
+//    	printf( "krnl:  expect(%d)= %ld\n", 0, temp1.s0 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 1, temp1.s1 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 2, temp1.s2 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 3, temp1.s3 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 4, temp1.s4 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 5, temp1.s5 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 6, temp1.s6 );
+//    	printf( "krnl:  expect(%d)= %ld\n", 7, temp1.s7 );
+
+
+    __attribute__((xcl_pipeline_loop))
+
     for (ii=0; ii<size; ii++)
     {
-//
+
     	temp0 = input0[ii];
 
     	flag0 = check_data64( temp0.s0, temp1.s0 );
@@ -101,7 +98,7 @@ void check_cnt(__global ulong8    * __restrict input0,
     checkStatus.s3 = blockError;
 
     *pStatus = checkStatus;
-    printf( "krnl - Ok\n" );
+    //printf( "krnl - Ok\n" );
 }
 
 

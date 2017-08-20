@@ -31,6 +31,9 @@ public:
 
     //! check data in the buffer
     void CheckBuffer( U32 *ptr );
+
+    //! Read status information from device
+    void GetStatus( void );
 };
 
 #endif // TF_CHECKTRANSFER_H

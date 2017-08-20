@@ -22,8 +22,9 @@ struct TF_CheckTransferOut_task_data {
     U32 BlockOk;        //!< Count of correct blocks
     U32 BlockError;     //!< Count of incorrect blocks
     U32 sizeBlock;      //!< Size of block [bytes]
+    U32 Sig;			//!< Signature for status buffer
     float VelocityCurrent;  //!< current speed (on 4 secund interval)
-    float VelocityAverage;  //!< average spped (from test start)
+    float VelocityAverage;  //!< average speed (from test start)
 
     clock_t startTick;      //!< Number of start clock();
     clock_t lastTick;       //!< Number of last clock()
@@ -31,15 +32,12 @@ struct TF_CheckTransferOut_task_data {
     float   testTime;       //!< Time from test start
 
 
-    time_t  startTime;
-    time_t  currentTime;
+    time_t  startTime;		//!< time of start main test cycle
+    time_t  currentTime;	//!< current test time
 
     cl_ulong  dataOut;        //!< current data for output
     cl_ulong  dataExpect;      //!< expect data from input
 
-//    xcl_world   xcl;        //!< OpenCL enviropment for device
-//    cl_program  program;    //!< OpenCL programm
-//    cl_kernel   kernel;     //!< OpenCL kernel
 
     char *xclbinFileName;   //!< file name for container
     char *kernelName;       //!< kernel name
@@ -57,7 +55,7 @@ struct TF_CheckTransferOut_task_data {
 
     cl::Buffer		*dpStatus;		//!< pointer to status buffer in the device memory
 
-    U32	*pStatus;					//!< pointer to status buffer in the host memory
+    U32	*pStatus;					//!< pointer to status buffer in the host memory address space
 
     TF_CheckTransferOut_task_data()
     {
@@ -76,12 +74,6 @@ struct TF_CheckTransferOut_task_data {
 
       kernelName = "check_cnt";
 
-
-/*      pDevice  = NULL;
-      pContext = NULL;
-      pProgram = NULL;
-      pKrnl     = NULL;
-*/
 
       pBufOut[0]=NULL;
       pBufOut[1]=NULL;
@@ -146,7 +138,8 @@ TF_CheckTransferOut::~TF_CheckTransferOut()
 
     free( td->pBufOut[0] ); td->pBufOut[0]=NULL;
     free( td->pBufOut[1] ); td->pBufOut[1]=NULL;
-    free( td->pStatus );	td->pStatus=NULL;
+    //free( td->pStatus );	td->pStatus=NULL;
+
 
     delete td->pBuffer[0]; td->pBuffer[0]=NULL;
     delete td->pBuffer[1]; td->pBuffer[1]=NULL;
@@ -188,9 +181,9 @@ void TF_CheckTransferOut::PrepareInThread()
     td->krnl = krnl;
 
 
-    td->sizeBlock = 16 * 1024 * 1024;
+    //td->sizeBlock = 16 * 1024 * 1024;
 
-    //td->sizeBlock = 16 * 1024;
+    td->sizeBlock = 4 * 1024;
 
     printf( "Alloc host memory 2 x %d ", td->sizeBlock );
     {
@@ -198,23 +191,23 @@ void TF_CheckTransferOut::PrepareInThread()
         int err;
         err = posix_memalign( &ptr, 4096, td->sizeBlock );
         if( err )
-            except_info( "%s - ошибка выделения памяти ");
+            throw except_info( "%s - memory allocation error ", __FUNCTION__);
         td->pBufOut[0] = (U32*) ptr;
         printf( "ptr=%p\n", ptr );
 
         err = posix_memalign( &ptr, 4096, td->sizeBlock );
         if( err )
-            except_info( "%s - ошибка выделения памяти ");
+        	throw except_info( "%s - memory allocation error ", __FUNCTION__);
         td->pBufOut[1] = (U32*) ptr;
 
         printf( "ptr=%p\n", ptr );
 
 
 
-        err = posix_memalign( &ptr, 4096, 4096 );
-        if( err )
-            except_info( "%s - ошибка выделения памяти ");
-        td->pStatus = (U32*) ptr;
+//        err = posix_memalign( &ptr, 4096, 4096 );
+//        if( err )
+//        	throw except_info( "%s - memory allocation error ", __FUNCTION__);
+//        td->pStatus = (U32*) ptr;
 
 
     }
@@ -270,6 +263,8 @@ void TF_CheckTransferOut::PrepareInThread()
                                &input_buffer_ext
                                );
         td->dpStatus = pBuf;
+
+
     }
 
     printf( " - Ok\n" );
@@ -289,6 +284,36 @@ void TF_CheckTransferOut::CleanupInThread()
 void TF_CheckTransferOut::GetResultInThread()
 {
     printf( "%s\n", __FUNCTION__ );
+    GetStatus();
+
+    int flag_error=0;
+
+    if( 0xAA55==td->Sig )
+    {
+    	printf( "Sig=0xAA55 - Ok\n");
+    } else
+    {
+    	printf( "Sig=0x%X - Error, expect 0xAA55\n", td->Sig );
+    	flag_error=1;
+    }
+    printf( "BlockWr    = %d\n", td->BlockWr );
+    printf( "BlockRd    = %d\n", td->BlockRd );
+    printf( "BlockOK    = %d\n", td->BlockOk );
+    printf( "BlockError = %d\n", td->BlockError );
+
+    if( td->BlockOk!=td->BlockRd )
+    	flag_error++;
+
+    if( 0 == td->BlockRd )
+    	flag_error++;
+
+    if( 0 != td->BlockError )
+    	flag_error++;
+
+    if( 0==flag_error )
+    	printf( "\nTest finished successfully\n\n" );
+    else
+    	printf( "\nTest finished with errors\n\n" );
 
 }
 
@@ -319,6 +344,25 @@ void TF_CheckTransferOut::Run()
     td->startTime = time(NULL);
 
     cl::CommandQueue q(td->context, td->device );
+
+    {
+		cl_int ret=-1;
+		td->pStatus = (U32*) q.enqueueMapBuffer(
+				*(td->dpStatus),
+				CL_TRUE,
+				CL_MAP_READ | CL_MAP_WRITE,
+				0,
+				4096,
+				NULL,
+				NULL,
+				&ret
+				);
+		if( CL_SUCCESS!=ret )
+		{
+			throw except_info( "%s - map status buffer error ret=%d ", __FUNCTION__, ret );
+		}
+    }
+
     cl::Event eventCompletionTransfer0;
     cl::Event eventCompletionTransfer1;
     cl::Event eventCompletionExecuting0;
@@ -359,7 +403,7 @@ void TF_CheckTransferOut::Run()
                     &eventCompletionTransfer0
                     );
 
-            for( int jj=0; jj<89; jj++ )
+            for( int jj=0; jj<8; jj++ )
             {
             	arrayExpect.s[jj]=jj*2;
             }
@@ -374,21 +418,27 @@ void TF_CheckTransferOut::Run()
 
             cl::NDRange globalNDR(1,1,1);
             cl::NDRange localNDR(1,1,1);
+            cl::NDRange offsetNDR=cl::NullRange;
 
-//            q.enqueueNDRangeKernel(
-//            		td->krnl,
-//					cl::NDRange(0,0,0),
-//					globalNDR,
-//					localNDR,
-//					//&events0,
-//					NULL,
-//					&eventCompletionExecuting0
-//
-//					);
+            ret = q.enqueueNDRangeKernel(
+            		td->krnl,
+					offsetNDR,
+					globalNDR,
+					localNDR,
+					//&events0,
+					NULL,
+					&eventCompletionExecuting0
+
+					);
+
+            if( CL_SUCCESS != ret )
+            {
+            	throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
+            }
 
 
             eventCompletionExecuting0.wait();
-            q.enqueueTask( td->krnl );
+//            q.enqueueTask( td->krnl );
 //
 //            if( flag_wait)
 //             ret = eventCompletion1.wait();
@@ -415,7 +465,7 @@ void TF_CheckTransferOut::Run()
 //                td->BlockError++;
         }
 
-        //eventCompletionExecuting0.wait();
+        eventCompletionExecuting0.wait();
 
         clock_t currentTick = clock();
         clock_t diff = currentTick - td->lastTick;
@@ -444,6 +494,15 @@ void TF_CheckTransferOut::Run()
             td->testTime = timeFromStart;
         }
     }
+
+
+    q.enqueueUnmapMemObject(
+    	*(td->dpStatus),	// const Memory& memory,
+		td->pStatus,		// void * mapped_ptr,
+		NULL,				// const VECTOR_CLASS<Event> * events = NULL,
+		NULL				// Event * event = NULL)
+	);
+    td->pStatus=NULL;
 
 }
 
@@ -500,4 +559,17 @@ void TF_CheckTransferOut::CheckBuffer( U32 *ptr )
         td->BlockOk++;
     else
         td->BlockError++;
+}
+
+//! Read status information from device
+void TF_CheckTransferOut::GetStatus( void )
+{
+	if( NULL==td->pStatus )
+		return;
+
+	td->Sig		   = td->pStatus[0];
+	td->BlockRd    = td->pStatus[1];
+	td->BlockOk    = td->pStatus[2];
+	td->BlockError = td->pStatus[3];
+
 }
