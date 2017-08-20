@@ -39,4 +39,7 @@ Arguments:
 * -file	  <fullpath>	: fullpath for xclbin 
 * -size   <size>	: size block of bytes, default 65536
 
+Doxygen documentation: https://dsmv.github.io/sdaccel/check_transfer/index.html
+
+[Doxygen documentation](docs/check_transfer/index.html)
 
