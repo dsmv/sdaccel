@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 {
     int X = 0;
     int Y = 0;
-    int tableMode=0;
-    int timeMode=20;
+    int tableMode=1;
+    int timeMode=40;
     long	testStartTime;
 
     const char *headers[] = {

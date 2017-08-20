@@ -18,7 +18,7 @@
 							<targetPlatform id="com.xilinx.sdx.opencl.config.sw_emu.2002955441..2715933" name=""/>
 							<builder buildPath="${workspace_loc:/check_transfer}/Emulation-CPU" enableAutoBuild="true" id="com.xilinx.sdx.opencl.make_builder.433729755" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Xilinx SDx OpenCL Builder" superClass="com.xilinx.sdx.opencl.make_builder"/>
 							<tool id="com.xilinx.sdx.opencl.toolchain.xocc_compiler.1305870125" name="SDx XOCC Kernel Compiler" superClass="com.xilinx.sdx.opencl.toolchain.xocc_compiler">
-								<option id="com.xilinx.sdx.opencl.toolchain.xocc_compiler.include_paths.1383071805" superClass="com.xilinx.sdx.opencl.toolchain.xocc_compiler.include_paths" valueType="includePath">
+								<option id="com.xilinx.sdx.opencl.toolchain.xocc_compiler.include_paths.1383071805" name="Include paths (-I)" superClass="com.xilinx.sdx.opencl.toolchain.xocc_compiler.include_paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host_util}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/kernel}&quot;"/>
@@ -28,7 +28,7 @@
 							<tool id="com.xilinx.sdx.opencl.toolchain.xocc_linker.91845789" name="SDx XOCC Kernel Linker" superClass="com.xilinx.sdx.opencl.toolchain.xocc_linker"/>
 							<tool id="com.xilinx.sdx.opencl.emconfigutil.1626982049" name="emconfigutil" superClass="com.xilinx.sdx.opencl.emconfigutil"/>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_compiler.sw_emu.debug.1014848751" name="SDx GCC Host Compiler (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_compiler.sw_emu.debug">
-								<option id="com.xilinx.sdx.opencl.cpp.compiler.include.paths.285880728" superClass="com.xilinx.sdx.opencl.cpp.compiler.include.paths" valueType="includePath">
+								<option id="com.xilinx.sdx.opencl.cpp.compiler.include.paths.285880728" name="Include paths (-I)" superClass="com.xilinx.sdx.opencl.cpp.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="${env_var:XILINX_SDX}/runtime/include/1_2/"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host_util}&quot;"/>
@@ -71,6 +71,13 @@
 							<tool id="com.xilinx.sdx.opencl.toolchain.xocc_linker.1054451943" name="SDx XOCC Kernel Linker" superClass="com.xilinx.sdx.opencl.toolchain.xocc_linker"/>
 							<tool id="com.xilinx.sdx.opencl.emconfigutil.184263827" name="emconfigutil" superClass="com.xilinx.sdx.opencl.emconfigutil"/>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_compiler.hw_emu.debug.666081987" name="SDx GCC Host Compiler (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_compiler.hw_emu.debug">
+								<option id="com.xilinx.sdx.opencl.cpp.compiler.include.paths.1447750166" name="Include paths (-I)" superClass="com.xilinx.sdx.opencl.cpp.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="${env_var:XILINX_SDX}/runtime/include/1_2/"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host_util}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/kernel}&quot;"/>
+									<listOptionValue builtIn="false" value="${env_var:XILINX_VIVADO_HLS}/include/"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1876212396" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw.441962671" name="SDx GCC Host Linker (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw">
@@ -106,6 +113,13 @@
 							<tool id="com.xilinx.sdx.opencl.toolchain.xocc_linker.431047654" name="SDx XOCC Kernel Linker" superClass="com.xilinx.sdx.opencl.toolchain.xocc_linker"/>
 							<tool id="com.xilinx.sdx.opencl.emconfigutil.853161102" name="emconfigutil" superClass="com.xilinx.sdx.opencl.emconfigutil"/>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_compiler.hw.568071846" name="SDx GCC Host Compiler (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_compiler.hw">
+								<option id="com.xilinx.sdx.opencl.cpp.compiler.include.paths.1946007244" superClass="com.xilinx.sdx.opencl.cpp.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="${env_var:XILINX_SDX}/runtime/include/1_2/"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/host_util}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/kernel}&quot;"/>
+									<listOptionValue builtIn="false" value="${env_var:XILINX_VIVADO_HLS}/include/"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1811234610" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw.1347228236" name="SDx GCC Host Linker (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw">
@@ -129,6 +143,9 @@
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.xilinx.sdx.opencl.config.sw_emu.2002955441;com.xilinx.sdx.opencl.config.sw_emu.2002955441.;com.xilinx.sdx.opencl.toolchain.gcc_compiler.sw_emu.debug.1014848751;cdt.managedbuild.tool.gnu.cpp.compiler.input.412377062">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.xilinx.sdx.opencl.config.hw_emu.54298381;com.xilinx.sdx.opencl.config.hw_emu.54298381.;com.xilinx.sdx.opencl.toolchain.gcc_compiler.hw_emu.debug.666081987;cdt.managedbuild.tool.gnu.cpp.compiler.input.1876212396">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>

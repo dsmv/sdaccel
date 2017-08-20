@@ -19,6 +19,7 @@ void check_cnt(__global ulong8    * __restrict input0,
     uint	blockOk;
     uint	blockError;
 
+
     ulong8 	temp0, temp1;
 
     uint16	checkStatus;
@@ -32,12 +33,15 @@ void check_cnt(__global ulong8    * __restrict input0,
     bool	flag6;
     bool	flag7;
 
+    bool 	word_error;
+    uint	cnt_error=0;
 
     checkStatus = *pStatus;
 
     blockRd 	= checkStatus.s1;
     blockOk 	= checkStatus.s2;
     blockError	= checkStatus.s3;
+    //printf( "krnl - %.4x %d %d %d \n", checkStatus.s0, blockRd, blockOk, blockError );
 
 
     temp1 = expect;
@@ -47,14 +51,14 @@ void check_cnt(__global ulong8    * __restrict input0,
 //    printf( "krnl:  size=%d\n", size);
 //
 //    //for( int ii=0; ii<8; ii++ )
-//    	printf( "krnl:  expect(%d)= %ld\n", 0, temp1.s0 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 1, temp1.s1 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 2, temp1.s2 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 3, temp1.s3 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 4, temp1.s4 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 5, temp1.s5 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 6, temp1.s6 );
-//    	printf( "krnl:  expect(%d)= %ld\n", 7, temp1.s7 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 0, temp1.s0 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 1, temp1.s1 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 2, temp1.s2 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 3, temp1.s3 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 4, temp1.s4 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 5, temp1.s5 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 6, temp1.s6 );
+//    	printf( "krnl:  expect(%X)= %lX\n", 7, temp1.s7 );
 
 
     __attribute__((xcl_pipeline_loop))
@@ -62,6 +66,7 @@ void check_cnt(__global ulong8    * __restrict input0,
     for (ii=0; ii<size; ii++)
     {
 
+    	word_error=0;
     	temp0 = input0[ii];
 
     	flag0 = check_data64( temp0.s0, temp1.s0 );
@@ -74,7 +79,41 @@ void check_cnt(__global ulong8    * __restrict input0,
     	flag7 = check_data64( temp0.s7, temp1.s7 );
 
     	if( flag0 || flag1 || flag2 || flag3 || flag4 || flag5 || flag6 || flag7 )
+    	{
     		flagError=1;
+    		word_error=1;
+    		cnt_error++;
+
+    	}
+
+
+//    	if( word_error && cnt_error<4 )
+//    	{
+//    		printf( "0: %.4X %.4X %.4X %.4X %.4X %.4X %.4X %.4X ii=%d\n",
+//    				temp0.s0,
+//    				temp0.s1,
+//    				temp0.s2,
+//    				temp0.s3,
+//    				temp0.s4,
+//    				temp0.s5,
+//    				temp0.s6,
+//    				temp0.s7,
+//					ii
+//					);
+//
+//			printf( "1: %.4X %.4X %.4X %.4X %.4X %.4X %.4X %.4X   %d\n\n",
+//					temp1.s0,
+//					temp1.s1,
+//					temp1.s2,
+//					temp1.s3,
+//					temp1.s4,
+//					temp1.s5,
+//					temp1.s6,
+//					temp1.s7,
+//					word_error
+//
+//    		);
+//    	}
 
     	temp1.s0 +=8;
     	temp1.s1 +=8;
@@ -84,6 +123,7 @@ void check_cnt(__global ulong8    * __restrict input0,
     	temp1.s5 +=8;
     	temp1.s6 +=8;
     	temp1.s7 +=8;
+
     }
 
     if( flagError )
@@ -98,7 +138,8 @@ void check_cnt(__global ulong8    * __restrict input0,
     checkStatus.s3 = blockError;
 
     *pStatus = checkStatus;
-    //printf( "krnl - Ok\n" );
+
+    //printf( "krnl - %.4x %d %d %d - Ok\n", checkStatus.s0, blockRd, blockOk, blockError );
 }
 
 

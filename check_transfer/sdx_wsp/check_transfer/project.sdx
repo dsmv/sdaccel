@@ -4,26 +4,27 @@
     <configBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
-        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
     <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
-        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>
   <configuration name="Emulation-HW" id="com.xilinx.sdx.opencl.config.hw_emu.54298381">
-    <configBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" target="hw_emu">
+    <configBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" reportType="System" target="hw_emu">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
-        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
-    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" target="hw_emu">
+    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" reportType="System" target="hw_emu">
       <binaryContainers name="binary_container_1">
-        <kernels name="bandwidth" sourceFile="src/kernel.cl"/>
+        <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>
@@ -31,13 +32,13 @@
     <configBuildOptions xsi:type="openclProject:OpenCLOptions" reportType="System" target="hw">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
-        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
     <lastBuildOptions xsi:type="openclProject:OpenCLOptions" reportType="System" target="hw">
       <binaryContainers name="binary_container_1">
-        <kernels name="bandwidth" sourceFile="src/kernel.cl"/>
-        <kernels name="check_cnt" sourceFile="src/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
+        <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
+        <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>

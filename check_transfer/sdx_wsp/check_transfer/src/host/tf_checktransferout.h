@@ -1,7 +1,8 @@
 #ifndef TF_CHECKTRANSFER_H
 #define TF_CHECKTRANSFER_H
 
-#include "utypes.h"
+//#include "utypes.h"
+#include "xcl2.hpp"
 
 #include "tf_testthread.h"
 
@@ -27,10 +28,10 @@ public:
 
 
     //! set test data in buffer buffer
-    void SetBuffer( U32 *ptr );
+    void SetBuffer( cl_uint *ptr );
 
     //! check data in the buffer
-    void CheckBuffer( U32 *ptr );
+    void CheckBuffer( cl_uint *ptr );
 
     //! Read status information from device
     void GetStatus( void );
