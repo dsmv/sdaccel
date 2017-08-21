@@ -41,5 +41,5 @@ Arguments:
 
 Doxygen documentation: https://dsmv.github.io/sdaccel/check_transfer/index.html
 
-[Doxygen documentation](docs/check_transfer/index.html)
+
 

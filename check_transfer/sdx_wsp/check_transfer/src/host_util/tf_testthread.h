@@ -56,7 +56,7 @@ public:
     pthread_t 			m_hThread;
     pthread_attr_t  	m_attrThread;
 
-    int GetFromCommnadLine(int argc, char **argv, const char* name, int defValue);
+    static int GetFromCommnadLine(int argc, char **argv, const char* name, int defValue);
 };
 
 #endif /* TF_TestThread_H_ */

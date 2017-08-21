@@ -25,6 +25,9 @@ struct TF_CheckTransferOut_task_data {
     float VelocityCurrent;  //!< current speed (on 4 secund interval)
     float VelocityAverage;  //!< average speed (from test start)
 
+    float	VelocityCurMax;	//!< maximum of VelocityCurrent
+    float	VelocityCurMin;	//!< minimum of VelocityCurrent
+
     clock_t startTick;      //!< Number of start clock();
     clock_t lastTick;       //!< Number of last clock()
     cl_uint lastBlock;      //!< Number BlockWr for lastTick
@@ -32,7 +35,7 @@ struct TF_CheckTransferOut_task_data {
 
 
     time_t  startTime;		//!< time of start main test cycle
-    time_t  currentTime;	//!< current test time
+    time_t  lastTime;		//!< time of last interval
 
     cl_ulong  dataOut;        //!< current data for output
     cl_ulong  dataExpect;      //!< expect data from input
@@ -89,6 +92,10 @@ struct TF_CheckTransferOut_task_data {
       q=NULL;
 
       flagGetStatus=0;
+      VelocityCurMax=0;
+      VelocityCurMin=0;
+      VelocityAverage=0;
+      VelocityCurrent=0;
     };
 
     ~TF_CheckTransferOut_task_data()
@@ -305,7 +312,16 @@ void TF_CheckTransferOut::GetResultInThread()
     printf( "BlockWr    = %d\n", td->BlockWr );
     printf( "BlockRd    = %d\n", td->BlockRd );
     printf( "BlockOK    = %d\n", td->BlockOk );
-    printf( "BlockError = %d\n", td->BlockError );
+    printf( "BlockError = %d\n\n", td->BlockError );
+
+    printf( "Test time  = %-.0f s\n\n", td->testTime);
+
+    printf( "VelocityAverage    = %10.1f MB/s\n", td->VelocityAverage );
+    printf( "VelocityCurrentMax = %10.1f MB/s\n", td->VelocityCurMax );
+    printf( "VelocityCurrentMin = %10.1f MB/s\n", td->VelocityCurMin );
+
+
+
 
     if( td->BlockOk!=td->BlockRd )
     	flag_error++;
@@ -326,15 +342,15 @@ void TF_CheckTransferOut::GetResultInThread()
 //! Show table during test executing
 void TF_CheckTransferOut::StepTable()
 {
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 1, (unsigned)td->BlockWr );
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 2, (unsigned)td->BlockRd );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 1, (unsigned)td->BlockWr, "%10d" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 2, (unsigned)td->BlockRd, "%10d" );
 
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 3, (unsigned)td->BlockOk );
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 4, (unsigned)td->BlockError );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 3, (unsigned)td->BlockOk, "%10d" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 4, (unsigned)td->BlockError, "%10d" );
     m_pTemplateEngine->SetValueTable( td->RowNumber, 5, td->VelocityCurrent, "%10.1f" );
     m_pTemplateEngine->SetValueTable( td->RowNumber, 6, td->VelocityAverage, "%10.1f" );
 
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 0, td->testTime, "%10.1f" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 0, td->testTime, "%10.0f" );
 
     td->flagGetStatus=1;
 }
@@ -344,11 +360,8 @@ void TF_CheckTransferOut::Run()
 {
     td->RowNumber=m_pTemplateEngine->AddRowTable();
 
-    printf( "%s\n", __FUNCTION__ );
+    //printf( "%s\n", __FUNCTION__ );
 
-    td->startTick = td->lastTick = clock();
-
-    td->startTime = time(NULL);
 
     cl::CommandQueue q(td->context, td->device );
     td->q = &q;
@@ -369,7 +382,6 @@ void TF_CheckTransferOut::Run()
 				NULL,
 				NULL
 				);
-		printf( "%s ret=%d \n", __FUNCTION__, ret );
     }
 
 
@@ -386,6 +398,7 @@ void TF_CheckTransferOut::Run()
     std::vector<cl::Event>  events1;
 
     int flag_wait=0;
+    int flag_first_velocity=1;
 
     cl::NDRange globalNDR(1,1,1);
     cl::NDRange localNDR(1,1,1);
@@ -393,6 +406,9 @@ void TF_CheckTransferOut::Run()
 
     //SetBuffer( td->pBufOut[0] );
     //SetBuffer( td->pBufOut[1] );
+
+    td->lastTime = td->startTime = time(NULL);
+
     for( ; ; )
     {
         if( this->m_isTerminate )
@@ -528,31 +544,43 @@ void TF_CheckTransferOut::Run()
 
         //eventCompletionExecuting0.wait();
 
-        clock_t currentTick = clock();
-        clock_t diff = currentTick - td->lastTick;
-        clock_t interval = 5*CLOCKS_PER_SEC;
-        if( diff > interval )
+//        clock_t currentTick = clock();
+//        clock_t diff = currentTick - td->lastTick;
+//        clock_t interval = 5*CLOCKS_PER_SEC;
+
+        time_t currentTime = time(NULL);
+        time_t timeFromStart = currentTime - td->startTime;
+        time_t diff = currentTime - td->lastTime;
+        td->testTime = timeFromStart;
+
+        if( diff >= 4 )
         {
-            double currentTime = (currentTick - td->lastTick);
-            currentTime /=CLOCKS_PER_SEC;
-            double velocity = ((td->BlockWr-td->lastBlock)*td->sizeBlock)/currentTime;
+            double velocity = (1.0L*(td->BlockWr-td->lastBlock)*td->sizeBlock)/diff;
 
             td->VelocityCurrent = velocity / (1024*1024);
 
 
-//            currentTime = (currentTick - td->startTick);
-//            currentTime /=CLOCKS_PER_SEC;
-//            velocity = (td->BlockWr)*td->sizeBlock/currentTime;
-
-            time_t timeFromStart = time(NULL) - td->startTime;
-
-            velocity = (td->BlockWr)*td->sizeBlock/timeFromStart;
+            velocity = 1.0L*(td->BlockWr)*td->sizeBlock/timeFromStart;
 
             td->VelocityAverage = velocity / (1024*1024);
 
-            td->lastTick = currentTick;
+            td->lastTime = currentTime;
             td->lastBlock = td->BlockWr;
-            td->testTime = timeFromStart;
+
+            if( 1==flag_first_velocity )
+            {
+            	td->VelocityCurMax=td->VelocityCurrent;
+            	td->VelocityCurMin=td->VelocityCurrent;
+            	flag_first_velocity=0;
+            } else
+            {
+            	if( td->VelocityCurrent>td->VelocityCurMax )
+            		td->VelocityCurMax=td->VelocityCurrent;
+
+            	if( td->VelocityCurrent<td->VelocityCurMin )
+            		td->VelocityCurMin=td->VelocityCurrent;
+
+            }
         }
     }
 

@@ -29,13 +29,13 @@
     </lastBuildOptions>
   </configuration>
   <configuration name="System" id="com.xilinx.sdx.opencl.config.hw.1875329984">
-    <configBuildOptions xsi:type="openclProject:OpenCLOptions" reportType="System" target="hw">
+    <configBuildOptions xsi:type="openclProject:OpenCLOptions" hardwareOptimizationLevel="O_2" reportType="System" target="hw">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
         <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
-    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" reportType="System" target="hw">
+    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" hardwareOptimizationLevel="O_2" reportType="System" target="hw">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl"/>
         <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" numComputeUnits="2" maxMemoryPorts="true"/>

@@ -91,9 +91,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c55574e3edd1c9683f439314a16630f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19053296296b7697f2423d1de45b80d"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#aa19053296296b7697f2423d1de45b80d">Execute</a> ()</td></tr>
 <tr class="separator:aa19053296296b7697f2423d1de45b80d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#ae19dfe5a1b0da87a5b6301d02ee4372c">GetFromCommnadLine</a> (int argc, char **argv, const char *name, int defValue)</td></tr>
-<tr class="memdesc:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get value from command line  <a href="#ae19dfe5a1b0da87a5b6301d02ee4372c">More...</a><br /></td></tr>
-<tr class="separator:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab05aa1c5272dc8c4800ec646e7cd1100"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#ab05aa1c5272dc8c4800ec646e7cd1100">GetResult</a> ()</td></tr>
 <tr class="separator:ab05aa1c5272dc8c4800ec646e7cd1100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a450083e56c498a6260dab770e6e1ce56"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#a450083e56c498a6260dab770e6e1ce56">GetResultInThread</a> ()=0</td></tr>
@@ -124,6 +121,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#ae19dfe5a1b0da87a5b6301d02ee4372c">GetFromCommnadLine</a> (int argc, char **argv, const char *name, int defValue)</td></tr>
+<tr class="memdesc:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get value from command line  <a href="#ae19dfe5a1b0da87a5b6301d02ee4372c">More...</a><br /></td></tr>
+<tr class="separator:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ba6692148ce51f4bbfff8f408479c1f"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#a9ba6692148ce51f4bbfff8f408479c1f">ThreadFunc</a> (void *lpvThreadParm)</td></tr>
 <tr class="separator:a9ba6692148ce51f4bbfff8f408479c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -309,6 +309,9 @@ Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int TF_TestThread::GetFromCommnadLine </td>
@@ -340,6 +343,11 @@ Public Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>get value from command line </p>
@@ -357,7 +365,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tf__testthread_8cpp_source.html#l00227">227</a> of file <a class="el" href="tf__testthread_8cpp_source.html">tf_testthread.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00108">TF_CheckTransferOut::TF_CheckTransferOut()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>, and <a class="el" href="tf__checktransferout_8cpp_source.html#l00115">TF_CheckTransferOut::TF_CheckTransferOut()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;{</div><div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordtype">int</span> ret=defValue;</div><div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">for</span>( <span class="keywordtype">int</span> ii=1; ii&lt;argc-1; ii++ )</div><div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    {</div><div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="keywordflow">if</span>( 0==strcmp( argv[ii], name) )</div><div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        {</div><div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            ret=atoi( argv[ii+1] );</div><div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }</div><div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div><div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
@@ -811,7 +819,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tf__testthread_8h_source.html#l00047">47</a> of file <a class="el" href="tf__testthread_8h_source.html">tf_testthread.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00343">TF_CheckTransferOut::Run()</a>, <a class="el" href="tf__testthread_8cpp_source.html#l00171">Stop()</a>, and <a class="el" href="tf__testthread_8cpp_source.html#l00021">TF_TestThread()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00359">TF_CheckTransferOut::Run()</a>, <a class="el" href="tf__testthread_8cpp_source.html#l00171">Stop()</a>, and <a class="el" href="tf__testthread_8cpp_source.html#l00021">TF_TestThread()</a>.</p>
 
 </div>
 </div>
