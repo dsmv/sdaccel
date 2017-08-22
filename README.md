@@ -37,7 +37,9 @@ Arguments:
 * -table  <flag_show>	: 1 - show table, 0 -	do not show table, default 0
 * -time   <time> 	: execution time [s], default 10
 * -file	  <fullpath>	: fullpath for xclbin 
-* -size   <size>	: size block of bytes, default 65536
+* -size   <size>	: size block of megabytes, default 64
+* -metric <flag>	: 0 - binary:  1MB=2^10=1024*1024=1048576 bytes
+                          1 - decimal: 1MB=10^6=1000*1000=1000000 bytes
 
 Doxygen documentation: https://dsmv.github.io/sdaccel/check_transfer/index.html
 

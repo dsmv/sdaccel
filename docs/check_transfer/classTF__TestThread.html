@@ -95,6 +95,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab05aa1c5272dc8c4800ec646e7cd1100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a450083e56c498a6260dab770e6e1ce56"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#a450083e56c498a6260dab770e6e1ce56">GetResultInThread</a> ()=0</td></tr>
 <tr class="separator:a450083e56c498a6260dab770e6e1ce56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac957ddbc87f4963626e2e44b798403da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#ac957ddbc87f4963626e2e44b798403da">GetStrFromCommnadLine</a> (int argc, char **argv, const char *name, char *defValue, char *dst, int dstLen)</td></tr>
+<tr class="memdesc:ac957ddbc87f4963626e2e44b798403da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get string value from command line.  <a href="#ac957ddbc87f4963626e2e44b798403da">More...</a><br /></td></tr>
+<tr class="separator:ac957ddbc87f4963626e2e44b798403da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e3b72aedc2a500e55c040ee4417a076"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#a1e3b72aedc2a500e55c040ee4417a076">isComplete</a> ()</td></tr>
 <tr class="separator:a1e3b72aedc2a500e55c040ee4417a076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfc9a31db91472deb811a47c1cf8e20f"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#acfc9a31db91472deb811a47c1cf8e20f">Prepare</a> (int cnt)</td></tr>
@@ -122,7 +125,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#ae19dfe5a1b0da87a5b6301d02ee4372c">GetFromCommnadLine</a> (int argc, char **argv, const char *name, int defValue)</td></tr>
-<tr class="memdesc:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get value from command line  <a href="#ae19dfe5a1b0da87a5b6301d02ee4372c">More...</a><br /></td></tr>
+<tr class="memdesc:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get integer value from command line.  <a href="#ae19dfe5a1b0da87a5b6301d02ee4372c">More...</a><br /></td></tr>
 <tr class="separator:ae19dfe5a1b0da87a5b6301d02ee4372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ba6692148ce51f4bbfff8f408479c1f"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTF__TestThread.html#a9ba6692148ce51f4bbfff8f408479c1f">ThreadFunc</a> (void *lpvThreadParm)</td></tr>
 <tr class="separator:a9ba6692148ce51f4bbfff8f408479c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -350,7 +353,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>get value from command line </p>
+<p>Get integer value from command line. </p>
 <p>format command line: &lt;name1&gt; &lt;value1&gt; &lt;name2&gt; &lt;value2&gt;</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -365,7 +368,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tf__testthread_8cpp_source.html#l00227">227</a> of file <a class="el" href="tf__testthread_8cpp_source.html">tf_testthread.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>, and <a class="el" href="tf__checktransferout_8cpp_source.html#l00115">TF_CheckTransferOut::TF_CheckTransferOut()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>, and <a class="el" href="tf__checktransferout_8cpp_source.html#l00124">TF_CheckTransferOut::TF_CheckTransferOut()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;{</div><div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordtype">int</span> ret=defValue;</div><div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">for</span>( <span class="keywordtype">int</span> ii=1; ii&lt;argc-1; ii++ )</div><div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    {</div><div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="keywordflow">if</span>( 0==strcmp( argv[ii], name) )</div><div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        {</div><div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            ret=atoi( argv[ii+1] );</div><div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }</div><div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div><div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
@@ -398,7 +401,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="tf__testthread_8h_source.html#l00052">m_ResultCompleteMutex</a>, and <a class="el" href="tf__testthread_8h_source.html#l00051">m_ResultStartMutex</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;{</div><div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld (START)\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div><div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="comment">// Unlock mutex for finish Execute()</span></div><div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    pthread_mutex_unlock(&amp;<a class="code" href="classTF__TestThread.html#a744f656b6fc143e56c4b846f40a74510">m_ResultStartMutex</a>);</div><div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div><div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld (Unlock m_ResultStartMutex)\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div><div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="comment">// Waiting here while GetResultInThread() will be called and complete from Execute();</span></div><div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    pthread_mutex_lock(&amp;<a class="code" href="classTF__TestThread.html#a40b630ae22637321fe7b8becaceab805">m_ResultCompleteMutex</a>);</div><div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div><div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld (COMPLETE)\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;}</div><div class="ttc" id="classTF__TestThread_html_a744f656b6fc143e56c4b846f40a74510"><div class="ttname"><a href="classTF__TestThread.html#a744f656b6fc143e56c4b846f40a74510">TF_TestThread::m_ResultStartMutex</a></div><div class="ttdeci">pthread_mutex_t m_ResultStartMutex</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00051">tf_testthread.h:51</a></div></div>
 <div class="ttc" id="classTF__TestThread_html_a40b630ae22637321fe7b8becaceab805"><div class="ttname"><a href="classTF__TestThread.html#a40b630ae22637321fe7b8becaceab805">TF_TestThread::m_ResultCompleteMutex</a></div><div class="ttdeci">pthread_mutex_t m_ResultCompleteMutex</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00052">tf_testthread.h:52</a></div></div>
 </div><!-- fragment -->
@@ -433,6 +436,77 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac957ddbc87f4963626e2e44b798403da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac957ddbc87f4963626e2e44b798403da">&#9670;&nbsp;</a></span>GetStrFromCommnadLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int TF_TestThread::GetStrFromCommnadLine </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>defValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dstLen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get string value from command line. </p>
+<p>format command line: &lt;name1&gt; &lt;text1&gt; &lt;name2&gt; &lt;text2&gt;</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>number of argument </td></tr>
+    <tr><td class="paramname">argv</td><td>pointers to arguments </td></tr>
+    <tr><td class="paramname">name</td><td>key of argument </td></tr>
+    <tr><td class="paramname">defValue</td><td>default value for arguments </td></tr>
+    <tr><td class="paramname">dst</td><td>pointer to destination string, NULL - do not copy </td></tr>
+    <tr><td class="paramname">dstLen</td><td>max number of chars in the dst</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 - name not found, 1 - found only name, 2 - found name and text </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tf__testthread_8cpp_source.html#l00256">256</a> of file <a class="el" href="tf__testthread_8cpp_source.html">tf_testthread.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00124">TF_CheckTransferOut::TF_CheckTransferOut()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;{</div><div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordtype">int</span> ret=0;</div><div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keywordtype">int</span> index=0;</div><div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordflow">for</span>( <span class="keywordtype">int</span> ii=1; ii&lt;argc; ii++ )</div><div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    {</div><div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">if</span>( 0==strcmp( argv[ii], name) )</div><div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        {</div><div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                <span class="keywordflow">if</span>( ii==(argc-1) )</div><div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                        ret=1;</div><div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                <span class="keywordflow">else</span></div><div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                {</div><div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                        ret=2; index=ii;</div><div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                }</div><div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div><div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                <span class="keywordflow">break</span>;</div><div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        }</div><div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    }</div><div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">if</span>( NULL!=dst )</div><div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        {</div><div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                <span class="keywordflow">if</span>( 2==ret )</div><div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                        strncpy( dst, argv[index+1], dstLen );</div><div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <span class="keywordflow">else</span></div><div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                        strncpy( dst, defValue, dstLen );</div><div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                dst[dstLen-1]=0;</div><div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        }</div><div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
 <a id="a1e3b72aedc2a500e55c040ee4417a076"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1e3b72aedc2a500e55c040ee4417a076">&#9670;&nbsp;</a></span>isComplete()</h2>
 
@@ -462,7 +536,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="tf__testthread_8h_source.html#l00046">m_isComplete</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;{</div><div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="comment">//if(m_isComplete &gt; 0)</span></div><div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div><div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classTF__TestThread.html#ab3f42e170b84b6b124fae56d403504c1">m_isComplete</a>;</div><div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;}</div><div class="ttc" id="classTF__TestThread_html_ab3f42e170b84b6b124fae56d403504c1"><div class="ttname"><a href="classTF__TestThread.html#ab3f42e170b84b6b124fae56d403504c1">TF_TestThread::m_isComplete</a></div><div class="ttdeci">int m_isComplete</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00046">tf_testthread.h:46</a></div></div>
 </div><!-- fragment -->
 </div>
@@ -497,7 +571,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="exceptinfo_8cpp_source.html#l00025">except_info()</a>, <a class="el" href="tf__testthread_8h_source.html#l00057">m_attrThread</a>, <a class="el" href="tf__testthread_8h_source.html#l00056">m_hThread</a>, <a class="el" href="tf__testthread_8h_source.html#l00049">m_isException</a>, <a class="el" href="tf__testthread_8h_source.html#l00045">m_isPrepareComplete</a>, and <a class="el" href="tf__testthread_8cpp_source.html#l00092">ThreadFunc()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span>( 0==cnt )</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    {</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">int</span> res = pthread_attr_init(&amp;<a class="code" href="classTF__TestThread.html#a111456494b43af46290cccae56efd170">m_attrThread</a>);</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">if</span>(res != 0) {</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;%s\n&quot;</span>, <span class="stringliteral">&quot;Stream not started&quot;</span>);</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">throw</span>( <span class="stringliteral">&quot;Stream not started&quot;</span> );</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        res = pthread_attr_setdetachstate(&amp;<a class="code" href="classTF__TestThread.html#a111456494b43af46290cccae56efd170">m_attrThread</a>, PTHREAD_CREATE_JOINABLE);</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">if</span>(res != 0) {</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;%s\n&quot;</span>, <span class="stringliteral">&quot;Stream not started&quot;</span>);</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">throw</span>( <span class="stringliteral">&quot;Stream not started&quot;</span> );</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        }</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        res = pthread_create(&amp;<a class="code" href="classTF__TestThread.html#a0c8b8d93ed2ae109221ea8da813ec389">m_hThread</a>, &amp;<a class="code" href="classTF__TestThread.html#a111456494b43af46290cccae56efd170">m_attrThread</a>, <a class="code" href="classTF__TestThread.html#a9ba6692148ce51f4bbfff8f408479c1f">ThreadFunc</a>, <span class="keyword">this</span>);</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">if</span>(res != 0) {</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;%s\n&quot;</span>, <span class="stringliteral">&quot;Stream not started&quot;</span>);</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordflow">throw</span>( <span class="stringliteral">&quot;Stream not started&quot;</span> );</div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">int</span> ret=<a class="code" href="classTF__TestThread.html#a5d92ac2f7010e79fb40326aa8980ddf3">m_isPrepareComplete</a>;</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">if</span>( <a class="code" href="classTF__TestThread.html#a9a70aa6334b0bb7dcc6bf10f98641cc9">m_isException</a> )</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    {</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">throw</span> <a class="code" href="exceptinfo_8cpp.html#a3e914264dc5f4f5951ed141b1d104a4d">except_info</a>( <span class="stringliteral">&quot;%s - exception during execute&quot;</span>, __FUNCTION__ );</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div><div class="ttc" id="classTF__TestThread_html_a9ba6692148ce51f4bbfff8f408479c1f"><div class="ttname"><a href="classTF__TestThread.html#a9ba6692148ce51f4bbfff8f408479c1f">TF_TestThread::ThreadFunc</a></div><div class="ttdeci">static void * ThreadFunc(void *lpvThreadParm)</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8cpp_source.html#l00092">tf_testthread.cpp:92</a></div></div>
 <div class="ttc" id="classTF__TestThread_html_a5d92ac2f7010e79fb40326aa8980ddf3"><div class="ttname"><a href="classTF__TestThread.html#a5d92ac2f7010e79fb40326aa8980ddf3">TF_TestThread::m_isPrepareComplete</a></div><div class="ttdeci">int m_isPrepareComplete</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00045">tf_testthread.h:45</a></div></div>
 <div class="ttc" id="exceptinfo_8cpp_html_a3e914264dc5f4f5951ed141b1d104a4d"><div class="ttname"><a href="exceptinfo_8cpp.html#a3e914264dc5f4f5951ed141b1d104a4d">except_info</a></div><div class="ttdeci">except_info_t except_info(const char *fmt,...)</div><div class="ttdef"><b>Definition:</b> <a href="exceptinfo_8cpp_source.html#l00025">exceptinfo.cpp:25</a></div></div>
@@ -594,7 +668,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="tf__testthread_8h_source.html#l00053">m_StartMutex</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;{</div><div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="comment">// Unlock mutex for unblock TF_TestThread::Execute() function</span></div><div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    pthread_mutex_unlock(&amp;<a class="code" href="classTF__TestThread.html#a1ad6411cf734262c0d8e58a763c88cfb">m_StartMutex</a>);</div><div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div><div class="ttc" id="classTF__TestThread_html_a1ad6411cf734262c0d8e58a763c88cfb"><div class="ttname"><a href="classTF__TestThread.html#a1ad6411cf734262c0d8e58a763c88cfb">TF_TestThread::m_StartMutex</a></div><div class="ttdeci">pthread_mutex_t m_StartMutex</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00053">tf_testthread.h:53</a></div></div>
 </div><!-- fragment -->
 </div>
@@ -657,7 +731,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="tf__testthread_8h_source.html#l00047">m_isTerminate</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00037">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00040">main()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;{</div><div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <a class="code" href="classTF__TestThread.html#ab7e24e3d4b9d6beb4a49d8845f5b2d9f">m_isTerminate</a> = 1;</div><div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="comment">//fprintf(stderr, &quot;TF_TestThread::%s(): ID - %ld\n&quot;, __FUNCTION__, pthread_self());</span></div><div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;}</div><div class="ttc" id="classTF__TestThread_html_ab7e24e3d4b9d6beb4a49d8845f5b2d9f"><div class="ttname"><a href="classTF__TestThread.html#ab7e24e3d4b9d6beb4a49d8845f5b2d9f">TF_TestThread::m_isTerminate</a></div><div class="ttdeci">int m_isTerminate</div><div class="ttdef"><b>Definition:</b> <a href="tf__testthread_8h_source.html#l00047">tf_testthread.h:47</a></div></div>
 </div><!-- fragment -->
 </div>
@@ -819,7 +893,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tf__testthread_8h_source.html#l00047">47</a> of file <a class="el" href="tf__testthread_8h_source.html">tf_testthread.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00359">TF_CheckTransferOut::Run()</a>, <a class="el" href="tf__testthread_8cpp_source.html#l00171">Stop()</a>, and <a class="el" href="tf__testthread_8cpp_source.html#l00021">TF_TestThread()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tf__checktransferout_8cpp_source.html#l00358">TF_CheckTransferOut::Run()</a>, <a class="el" href="tf__testthread_8cpp_source.html#l00171">Stop()</a>, and <a class="el" href="tf__testthread_8cpp_source.html#l00021">TF_TestThread()</a>.</p>
 
 </div>
 </div>

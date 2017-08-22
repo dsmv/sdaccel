@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uns',['Uns',['../utypes_8h.html#a1bc4ad9a2ed0d35f8d5cc86faf3033f0',1,'utypes.h']]]
+  ['except_5finfo_5ft',['except_info_t',['../exceptinfo_8h.html#a898db97156fb0995bdb036329e5448a2',1,'exceptinfo.h']]]
 ];

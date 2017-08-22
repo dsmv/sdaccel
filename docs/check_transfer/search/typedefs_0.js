@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cell_5ft',['cell_t',['../term__table_8h.html#adaed80185cbd8de932a3bb1ffc7acb02',1,'term_table.h']]]
+  ['brdchar',['BRDCHAR',['../utypes_8h.html#a015bb7af93deb57a70b3f143f02b7cd2',1,'utypes.h']]]
 ];

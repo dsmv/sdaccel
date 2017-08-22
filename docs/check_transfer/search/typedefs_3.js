@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5ftype',['value_type',['../structaligned__allocator.html#aaed73c607e18d3913925e08d2b90c613',1,'aligned_allocator']]]
+  ['handle',['HANDLE',['../utypes_8h.html#ade48a6dd7fcc2782d6c9fe768f8d87e2',1,'utypes.h']]]
 ];

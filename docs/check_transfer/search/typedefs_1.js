@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['except_5finfo_5ft',['except_info_t',['../exceptinfo_8h.html#a898db97156fb0995bdb036329e5448a2',1,'exceptinfo.h']]]
+  ['cell_5ft',['cell_t',['../term__table_8h.html#adaed80185cbd8de932a3bb1ffc7acb02',1,'term_table.h']]]
 ];

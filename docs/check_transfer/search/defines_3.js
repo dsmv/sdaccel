@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['esc',['ESC',['../term__table_8h.html#a4af1b6159e447ba72652bb7fcdfa726e',1,'term_table.h']]]
+  ['dim',['DIM',['../term__table_8h.html#ac25189db92959bff3c6c2adf4c34b50a',1,'term_table.h']]]
 ];
