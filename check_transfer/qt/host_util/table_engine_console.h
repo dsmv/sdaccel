@@ -27,6 +27,7 @@ public:
     void SetConsolePos(int  X, int  Y);
 
 private:
+    int	flagTableCreate;
 #if defined(__linux__)
     int m_C, m_R;
     int WC, HC, WCL;

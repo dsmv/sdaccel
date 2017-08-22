@@ -24,6 +24,7 @@ static const char* te[] = { "┌", "┐", "└", "┘", "─", "│", "├", "�
 
 TableEngineConsole::TableEngineConsole() : TableEngine()
 {
+	flagTableCreate=0;
 #if defined(__linux__)
     rows.clear();
     m_C = m_R = 0;
@@ -87,6 +88,7 @@ int TableEngineConsole::CreateTable(const char *pColumnName[], unsigned nCount, 
         SetValueTable(0, i, "%s", pColumnName[i]);
     }
 
+    flagTableCreate=1;
     return 0;
 #else
 #endif
@@ -96,6 +98,9 @@ int TableEngineConsole::CreateTable(const char *pColumnName[], unsigned nCount, 
 
 int TableEngineConsole::AddRowTable()
 {
+	if( 0==flagTableCreate )
+		return 0;
+
 #if defined(__linux__)
     row_t new_row;
     row_t& last_row = rows.at(rows.size()-1);

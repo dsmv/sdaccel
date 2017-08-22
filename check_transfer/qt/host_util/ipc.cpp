@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <error.h>
-#include <sys/time.h>
+#include <time.h>
 #include <sys/ioctl.h>
 
 //-----------------------------------------------------------------------------
@@ -61,4 +61,9 @@ int IPC_kbhit(void)
     //DEBUG_PRINT("%s(): size = %d\n", __FUNCTION__, size );
 
     return size;
+}
+
+long IPC_getTickCount()
+{
+   return time(NULL) * 1000;
 }

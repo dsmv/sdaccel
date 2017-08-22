@@ -1,9 +1,11 @@
 
+
+
+
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include <assert.h>
-
 
 #include "ipc.h"
 #include "exceptinfo.h"
@@ -18,22 +20,43 @@ void signal_handler(int signo)
     exit_flag = 1;
 }
 
+/**
+ *
+ * 	\brief	Start point for host application
+ *
+ * 	\param	argc 	Number of arguments
+ * 	\parma	argv	Pointer of argumnts
+ *
+ * 	Arguments:
+ *
+ *
+ *
+ * 	-table	<flag_show>	  	: 1 - show table, 0 -	do not show table
+ * 	-time   <time> 		  	: execution time [s],
+ *	-mode	<n>				: 0 - Emulation-CPU, 1 - Emulation-HW, 2 - System
+ *
+ */
+
 int main(int argc, char **argv)
 {
     int X = 0;
     int Y = 0;
+    int tableMode;
+    int timeMode;
+    long	testStartTime;
 
     const char *headers[] = {
-        //"NAME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR", "STATUS", "OTHER",
-        "NAME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR",
+        "TIME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR",
     };
 
     TableEngine  *pTable = new TableEngineConsole();
-    pTable->CreateTable(headers, sizeof(headers)/sizeof(headers[0]), 0);
 
-    // Создадим две строки в таблице (для примера использования)
-    //pTable->AddRowTable();
-    //pTable->AddRowTable();
+    tableMode = TF_TestThread::GetFromCommnadLine( argc, argv, "-table", 0 );
+    timeMode  = TF_TestThread::GetFromCommnadLine( argc, argv, "-time", 10 );
+
+    if( tableMode )
+    	pTable->CreateTable(headers, sizeof(headers)/sizeof(headers[0]), 0);
+
 
     signal(SIGINT, signal_handler);
 
@@ -48,7 +71,8 @@ int main(int argc, char **argv)
 		}
 
 
-        pTable->GetConsolePos(X,Y);
+        if( tableMode )
+        	pTable->GetConsolePos(X,Y);
 
 		pTest->Start();
 
@@ -56,6 +80,9 @@ int main(int argc, char **argv)
         IPC_TIMEVAL start_time;
         IPC_TIMEVAL curr_time;
 #endif
+
+
+        testStartTime = IPC_getTickCount();
 
         int count = 0;
         while(1) {
@@ -75,6 +102,14 @@ int main(int argc, char **argv)
             // Тестирование реализовано в отдельном потоке
             IPC_delay(100);
 #endif
+
+				long currentTime = IPC_getTickCount();
+				if( timeMode>0 )
+				{
+					if( (currentTime - testStartTime) >= timeMode*1000 )
+							exit_flag=2;
+				}
+
                 if( exit_flag ) {
                     pTest->Stop();
 
@@ -84,30 +119,22 @@ int main(int argc, char **argv)
 
             }
 
-			pTest->StepTable();
+             if( tableMode )
+            	 pTest->StepTable();
 
-            // Сохраним координаты курсора, перед первым выводом в таблицу
-            // для последующего вывода информации с нужной строки
-            //if(count == 0) {
-                //pTable->GetConsolePos(X,Y);
-            //}
-
-            // Пример зарполнения информации в таблице
-            //pTable->SetValueTable(1,1,"%d : %d", 1,count);
-            //pTable->SetValueTable(2,2,"%d : %d", 2,count);
             ++count;
 
             if( IPC_kbhit() )
             {
+            	// \todo - don't work
                 int key = IPC_getch();
                 if( 27==key )
                     break;
             }
 		}
 
-        // Восстановим координаты курсора для того, чтобы
-        // печатаемый текст не накладывался на уже выведенный
-        pTable->SetConsolePos(X, Y+1);
+        if( tableMode )
+        	pTable->SetConsolePos(X, Y+1);
 
         pTest->GetResult();
 

@@ -56,7 +56,12 @@ public:
     pthread_t 			m_hThread;
     pthread_attr_t  	m_attrThread;
 
+    //! Get integer value from command line
     static int GetFromCommnadLine(int argc, char **argv, const char* name, int defValue);
+
+    //! Get string value from command line
+    int GetStrFromCommnadLine(int argc, char **argv, const char* name, char* defValue, char* dst, int dstLen );
+
 };
 
 #endif /* TF_TestThread_H_ */
