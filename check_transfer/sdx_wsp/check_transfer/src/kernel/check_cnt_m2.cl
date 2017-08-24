@@ -1,19 +1,65 @@
 
+#define BUFFER_SIZE 1024
+#define LOOP_SIZE   1024
 
 static bool	check_data64( ulong data_i, ulong expect );
 
+static void check_data( ulong8 *src, __global uint16 *pStatus, ulong8 expect, uint size );
+
+static void read_input(__global ulong8 *in, ulong8 * buffer_in, int size);
 
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
-void check_cnt(__global ulong8    * __restrict input0,
-               __global uint16    * __restrict pStatus,
-			   const 	ulong8   expect,
-			   const 	uint  size
+__attribute__ ((xcl_dataflow))
+void check_cnt_m2a(
+				__global ulong8    *src,
+				__global uint16    *pStatus,
+				const 	ulong8   expect,
+				const 	uint  size
 			  )
 {
 
+	   ulong8 buffer_in[BUFFER_SIZE];
+	   ulong8 buffer_out[BUFFER_SIZE];
 
-    ulong 	ii;
+	   read_input(src, buffer_in, size);
+	   check_data( buffer_in, pStatus, expect, size );
+
+}
+
+//__kernel
+//__attribute__ ((reqd_work_group_size(1,1,1)))
+//__attribute__ ((xcl_dataflow))
+//void check_cnt_m2b(
+//				__global ulong8    *src,
+//				__global uint16    *pStatus,
+//				const 	ulong8   expect,
+//				const 	uint  size
+//			  )
+//{
+//
+//	   ulong8 buffer_in[BUFFER_SIZE];
+//	   ulong8 buffer_out[BUFFER_SIZE];
+//
+//	   read_input( src, buffer_in, size);
+//	   check_data( buffer_in, pStatus, expect, size );
+//
+//}
+
+void read_input(__global ulong8 *in, ulong8 * buffer_in, int size)
+{
+	__attribute__((xcl_pipeline_loop))
+    for (int ii = 0 ; ii < size ; ii++)
+	{
+		buffer_in[ii] =  in[ii];
+	}
+}
+
+
+__attribute__ ((xcl_dataflow))
+static void check_data(  ulong8 *src, __global uint16 *pStatus, ulong8 expect, uint size )
+{
+
     uint  	flagError=0;
     uint	blockRd;
     uint	blockOk;
@@ -61,13 +107,12 @@ void check_cnt(__global ulong8    * __restrict input0,
 //    	printf( "krnl:  expect(%X)= %lX\n", 7, temp1.s7 );
 
 
-    __attribute__((xcl_pipeline_loop))
-
-    for (ii=0; ii<size; ii++)
+  __attribute__((xcl_pipeline_loop))
+  for ( int ii=0; ii<size; ii++)
     {
 
     	word_error=0;
-    	temp0 = input0[ii];
+    	temp0 = src[ii];
 
     	flag0 = check_data64( temp0.s0, temp1.s0 );
     	flag1 = check_data64( temp0.s1, temp1.s1 );

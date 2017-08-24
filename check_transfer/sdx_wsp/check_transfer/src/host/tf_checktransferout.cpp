@@ -80,7 +80,7 @@ struct TF_CheckTransferOut_task_data {
 
       xclbinFileName = new char[512];
 
-      kernelName = "check_cnt";
+      kernelName = "check_cnt_m2a";
 
 
       pBufOut[0]=NULL;
@@ -480,59 +480,59 @@ void TF_CheckTransferOut::Run()
             //eventCompletionExecuting0.wait();
 //            q.enqueueTask( td->krnl );
 //
-            if( flag_wait)
-             ret = eventCompletionExecuting1.wait();
-
-            SetBuffer( td->pBufOut[1] );
-            td->BlockWr++;
-
-            ret=q.enqueueWriteBuffer(
-                    *(td->pBuffer[1]),
-                    CL_FALSE,
-                    0,
-                    td->sizeBlock,
-                    td->pBufOut[1],
-                    NULL,
-                    &eventCompletionTransfer1
-                    );
-
-
-            {
-				ulong expect = td->dataExpect;
-				for( int jj=0; jj<8; jj++ )
-				{
-					arrayExpect.s[jj]=expect++;
-				}
-				td->dataExpect+=td->sizeBlock/8;
-            }
-
-            td->krnl.setArg( 0, *(td->pBuffer[1]) );
-            td->krnl.setArg( 1, *(td->dpStatus) );
-            td->krnl.setArg( 2, arrayExpect );
-            td->krnl.setArg( 3, sizeOfuint16 );
-
-            events1.clear();
-            events1.push_back( eventCompletionTransfer1 );
-
-
-
-            ret = q.enqueueNDRangeKernel(
-            		td->krnl,
-					offsetNDR,
-					globalNDR,
-					localNDR,
-					&events1,
-					//NULL,
-					&eventCompletionExecuting1
-
-					);
-
-					if( CL_SUCCESS != ret )
-					{
-						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
-					}
-
-
+//            if( flag_wait)
+//             ret = eventCompletionExecuting1.wait();
+//
+//            SetBuffer( td->pBufOut[1] );
+//            td->BlockWr++;
+//
+//            ret=q.enqueueWriteBuffer(
+//                    *(td->pBuffer[1]),
+//                    CL_FALSE,
+//                    0,
+//                    td->sizeBlock,
+//                    td->pBufOut[1],
+//                    NULL,
+//                    &eventCompletionTransfer1
+//                    );
+//
+//
+//            {
+//				ulong expect = td->dataExpect;
+//				for( int jj=0; jj<8; jj++ )
+//				{
+//					arrayExpect.s[jj]=expect++;
+//				}
+//				td->dataExpect+=td->sizeBlock/8;
+//            }
+//
+//            td->krnl.setArg( 0, *(td->pBuffer[1]) );
+//            td->krnl.setArg( 1, *(td->dpStatus) );
+//            td->krnl.setArg( 2, arrayExpect );
+//            td->krnl.setArg( 3, sizeOfuint16 );
+//
+//            events1.clear();
+//            events1.push_back( eventCompletionTransfer1 );
+//
+//
+//
+//            ret = q.enqueueNDRangeKernel(
+//            		td->krnl,
+//					offsetNDR,
+//					globalNDR,
+//					localNDR,
+//					&events1,
+//					//NULL,
+//					&eventCompletionExecuting1
+//
+//					);
+//
+//					if( CL_SUCCESS != ret )
+//					{
+//						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
+//					}
+//
+//
 
 
             flag_wait=1;

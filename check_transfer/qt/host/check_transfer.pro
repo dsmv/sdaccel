@@ -3,7 +3,7 @@ QT -= gui
 
 CONFIG += c++11
 
-TARGET = check_transfer
+TARGET = check_transfer.exe
 DESTDIR = ../../bin
 CONFIG += console
 CONFIG -= app_bundle
