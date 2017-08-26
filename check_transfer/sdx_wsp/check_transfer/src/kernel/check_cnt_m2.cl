@@ -4,9 +4,11 @@
 
 static bool	check_data64( ulong data_i, ulong expect );
 
-static void check_data( ulong8 *src, __global uint16 *pStatus, ulong8 expect, uint size );
+static void check_data( __global uint16 *pStatus, ulong8 expect, uint size );
 
-static void read_input(__global ulong8 *in, ulong8 * buffer_in, int size);
+static void read_input(__global ulong8 *in, uint size);
+
+pipe int pipe_input __attribute__((xcl_reqd_pipe_depth(512)));
 
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
@@ -19,11 +21,9 @@ void check_cnt_m2a(
 			  )
 {
 
-	   ulong8 buffer_in[BUFFER_SIZE];
-	   ulong8 buffer_out[BUFFER_SIZE];
 
-	   read_input(src, buffer_in, size);
-	   check_data( buffer_in, pStatus, expect, size );
+	   read_input(src, size);
+	   check_data( pStatus, expect, size );
 
 }
 
@@ -38,26 +38,23 @@ void check_cnt_m2a(
 //			  )
 //{
 //
-//	   ulong8 buffer_in[BUFFER_SIZE];
-//	   ulong8 buffer_out[BUFFER_SIZE];
-//
-//	   read_input( src, buffer_in, size);
-//	   check_data( buffer_in, pStatus, expect, size );
+//	   read_input(src, size);
+//	   check_data( pStatus, expect, size );
 //
 //}
 
-void read_input(__global ulong8 *in, ulong8 * buffer_in, int size)
+void read_input(__global ulong8 *in, uint size)
 {
 	__attribute__((xcl_pipeline_loop))
     for (int ii = 0 ; ii < size ; ii++)
 	{
-		buffer_in[ii] =  in[ii];
+		write_pipe_block( pipe_input,  &in[ii] );
 	}
 }
 
 
 __attribute__ ((xcl_dataflow))
-static void check_data(  ulong8 *src, __global uint16 *pStatus, ulong8 expect, uint size )
+static void check_data(  global uint16 *pStatus, ulong8 expect, uint size )
 {
 
     uint  	flagError=0;
@@ -112,7 +109,7 @@ static void check_data(  ulong8 *src, __global uint16 *pStatus, ulong8 expect, u
     {
 
     	word_error=0;
-    	temp0 = src[ii];
+    	read_pipe_block( pipe_input, &temp0 );
 
     	flag0 = check_data64( temp0.s0, temp1.s0 );
     	flag1 = check_data64( temp0.s1, temp1.s1 );
