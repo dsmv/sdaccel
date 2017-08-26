@@ -1,6 +1,6 @@
 
 
-bool	check_data64( ulong data_i, ulong expect );
+static bool	check_data64( ulong data_i, ulong expect );
 
 
 __kernel
@@ -144,7 +144,7 @@ void check_cnt(__global ulong8    * __restrict input0,
 
 
 
-bool	check_data64( ulong data_i, ulong expect )
+static bool	check_data64( ulong data_i, ulong expect )
 {
 	bool ret;
 

@@ -8,7 +8,7 @@
 #include "utypes.h"
 #include "ipc.h"
 
-//#include "xcl.h"
+
 #include <vector>
 
 
@@ -25,6 +25,12 @@ struct TF_CheckTransferOut_task_data {
     float VelocityCurrent;  //!< current speed (on 4 secund interval)
     float VelocityAverage;  //!< average speed (from test start)
 
+    float	VelocityCurMax;	//!< maximum of VelocityCurrent
+    float	VelocityCurMin;	//!< minimum of VelocityCurrent
+
+    cl_uint metricMode;		//!< 0 - binary:  1MB=2^10 bytes, 1 - decimal: 1MB=10^6 bytes
+    cl_uint	mbSize;			//!< bytes count in 1MB
+
     clock_t startTick;      //!< Number of start clock();
     clock_t lastTick;       //!< Number of last clock()
     cl_uint lastBlock;      //!< Number BlockWr for lastTick
@@ -32,7 +38,7 @@ struct TF_CheckTransferOut_task_data {
 
 
     time_t  startTime;		//!< time of start main test cycle
-    time_t  currentTime;	//!< current test time
+    time_t  lastTime;		//!< time of last interval
 
     cl_ulong  dataOut;        //!< current data for output
     cl_ulong  dataExpect;      //!< expect data from input
@@ -41,23 +47,23 @@ struct TF_CheckTransferOut_task_data {
     char *xclbinFileName;   //!< file name for container
     char *kernelName;       //!< kernel name
 
-    cl::Device  device;
-    cl::Context context;
-    cl::Program program;
-    cl::Kernel  krnl;
-    cl::CommandQueue *q;
+    cl::Device  device;			//!< OpenCL device
+    cl::Context context;		//!< OpenCL context
+    cl::Program program;		//!< OpenCL program
+    cl::Kernel  krnl;			//!< OpenCL kernel
+    cl::CommandQueue *q;		//!< Pointer to OpenCL command queue
 
-    std::string deviceName;
+    std::string deviceName;		//!< OpenCL device name
 
-    cl_uint *pBufOut[2];				//!< pointers to buffers in the host memory
+    cl_uint *pBufOut[2];			//!< pointers to buffers in the host memory
 
-    cl::Buffer      *pBuffer[2];	//!< pointers to buffers in the device memory
+    cl::Buffer  *pBuffer[2];		//!< pointers to buffers in the device memory
 
-    cl::Buffer		*dpStatus;		//!< pointer to status buffer in the device memory
+    cl::Buffer	*dpStatus;			//!< pointer to status buffer in the device memory
 
-    cl_uint	*pStatus;					//!< pointer to status buffer in the host memory
+    cl_uint		*pStatus;			//!< pointer to status buffer in the host memory
 
-    cl_ulong	flagGetStatus;			//!< 1 - request for get status information
+    cl_ulong	flagGetStatus;		//!< 1 - request for get status information
 
     TF_CheckTransferOut_task_data()
     {
@@ -72,9 +78,9 @@ struct TF_CheckTransferOut_task_data {
 
       dataOut=dataExpect=0xA0000000;
 
-      xclbinFileName = new char[256];
+      xclbinFileName = new char[512];
 
-      kernelName = "check_cnt";
+      kernelName = "check_cnt_m2a";
 
 
       pBufOut[0]=NULL;
@@ -89,6 +95,10 @@ struct TF_CheckTransferOut_task_data {
       q=NULL;
 
       flagGetStatus=0;
+      VelocityCurMax=0;
+      VelocityCurMin=0;
+      VelocityAverage=0;
+      VelocityCurrent=0;
     };
 
     ~TF_CheckTransferOut_task_data()
@@ -102,38 +112,28 @@ struct TF_CheckTransferOut_task_data {
 //! Constructor
 /**
  *
- * 		-mode	<n>				: 0 - Emulation-CPU, 1 - Emulation-HW, 2 - System
+ * 	arguments of command line:
+ *
+ * 		-file 	<path>  - fullpath for xclbin, default "../binary_container_1.xclbin"
+ * 		-size	<n>		- size block of kilobytes, default 64
+ * 		-metric <n>		- 0 - binary:  1MB=2^10=1024*1024=1048576 bytes,
+ * 						  1 - decimal: 1MB=10^6=1000*1000=1000000 bytes,
+ * 						  default 0
  *
  */
 TF_CheckTransferOut::TF_CheckTransferOut( TableEngine  *pTable, int argc, char **argv) : TF_TestThread( pTable, argc, argv )
 {
     td = new TF_CheckTransferOut_task_data();
 
-    int mode = GetFromCommnadLine( argc, argv, "-mode", 0 );
+    td->sizeBlock = 1024 * GetFromCommnadLine( argc, argv, "-size", 64 );
 
-    //"../sdx_wsp/check_transfer/System/binary_container_1.xclbin";
-    //const char *path0 = "../sdx_wsp/check_transfer/";
-    const char *path0 = "../";
-    const char *name  = "binary_container_1.xclbin";
+    td->metricMode = GetFromCommnadLine( argc, argv, "-metric", 0 );
+    if( 0==td->metricMode )
+    	td->mbSize = 1024*1024;
+    else
+    	td->mbSize = 1000000;
 
-
-    switch (mode)
-    {
-        case 0:
-            //sprintf( td->xclbinFileName, "%sEmulation-CPU/%s", path0, name );
-        	sprintf( td->xclbinFileName, "%s%s", path0, name );
-            break;
-        case 1:
-            sprintf( td->xclbinFileName, "%sEmulation-HW/%s", path0, name );
-            break;
-        case 2:
-            sprintf( td->xclbinFileName, "%sSystem/%s", path0, name );
-            break;
-
-        default:
-            throw except_info( "%s - mode=%d - it is not allowed ", __FUNCTION__, mode );
-            break;
-    }
+    GetStrFromCommnadLine( argc, argv, "-file", "../binary_container_1.xclbin", td->xclbinFileName, 510 );
 
 
 }
@@ -187,7 +187,7 @@ void TF_CheckTransferOut::PrepareInThread()
     td->krnl = krnl;
 
 
-    td->sizeBlock = 16 * 1024 * 1024;
+    //td->sizeBlock = 16 * 1024 * 1024;
 
     //td->sizeBlock = 4 * 1024;
 
@@ -199,14 +199,14 @@ void TF_CheckTransferOut::PrepareInThread()
         if( err )
             throw except_info( "%s - memory allocation error ", __FUNCTION__);
         td->pBufOut[0] = (cl_uint*) ptr;
-        printf( "ptr=%p\n", ptr );
+        //printf( "ptr=%p\n", ptr );
 
         err = posix_memalign( &ptr, 4096, td->sizeBlock );
         if( err )
         	throw except_info( "%s - memory allocation error ", __FUNCTION__);
         td->pBufOut[1] = (cl_uint*) ptr;
 
-        printf( "ptr=%p\n", ptr );
+        //printf( "ptr=%p\n", ptr );
 
 
 
@@ -305,7 +305,22 @@ void TF_CheckTransferOut::GetResultInThread()
     printf( "BlockWr    = %d\n", td->BlockWr );
     printf( "BlockRd    = %d\n", td->BlockRd );
     printf( "BlockOK    = %d\n", td->BlockOk );
-    printf( "BlockError = %d\n", td->BlockError );
+    printf( "BlockError = %d\n\n", td->BlockError );
+
+    printf( "Size of block  = %u \n\n", td->sizeBlock);
+
+    printf( "Test time  = %-.0f s\n\n", td->testTime);
+
+    printf( "VelocityAverage    = %10.1f MB/s\n", td->VelocityAverage );
+    printf( "VelocityCurrentMax = %10.1f MB/s\n", td->VelocityCurMax );
+    printf( "VelocityCurrentMin = %10.1f MB/s\n\n", td->VelocityCurMin );
+
+    if( 0==td->metricMode)
+    	printf( " 1 MB = 2^10 = 1024*1024 = 1048576 bytes\n");
+    else
+    	printf( " 1 MB = 10^6 = 1000000 bytes\n");
+
+
 
     if( td->BlockOk!=td->BlockRd )
     	flag_error++;
@@ -326,15 +341,15 @@ void TF_CheckTransferOut::GetResultInThread()
 //! Show table during test executing
 void TF_CheckTransferOut::StepTable()
 {
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 1, (unsigned)td->BlockWr );
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 2, (unsigned)td->BlockRd );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 1, (unsigned)td->BlockWr, "%10d" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 2, (unsigned)td->BlockRd, "%10d" );
 
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 3, (unsigned)td->BlockOk );
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 4, (unsigned)td->BlockError );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 3, (unsigned)td->BlockOk, "%10d" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 4, (unsigned)td->BlockError, "%10d" );
     m_pTemplateEngine->SetValueTable( td->RowNumber, 5, td->VelocityCurrent, "%10.1f" );
     m_pTemplateEngine->SetValueTable( td->RowNumber, 6, td->VelocityAverage, "%10.1f" );
 
-    m_pTemplateEngine->SetValueTable( td->RowNumber, 0, td->testTime, "%10.1f" );
+    m_pTemplateEngine->SetValueTable( td->RowNumber, 0, td->testTime, "%10.0f" );
 
     td->flagGetStatus=1;
 }
@@ -344,11 +359,8 @@ void TF_CheckTransferOut::Run()
 {
     td->RowNumber=m_pTemplateEngine->AddRowTable();
 
-    printf( "%s\n", __FUNCTION__ );
+    //printf( "%s\n", __FUNCTION__ );
 
-    td->startTick = td->lastTick = clock();
-
-    td->startTime = time(NULL);
 
     cl::CommandQueue q(td->context, td->device );
     td->q = &q;
@@ -369,7 +381,6 @@ void TF_CheckTransferOut::Run()
 				NULL,
 				NULL
 				);
-		printf( "%s ret=%d \n", __FUNCTION__, ret );
     }
 
 
@@ -386,6 +397,7 @@ void TF_CheckTransferOut::Run()
     std::vector<cl::Event>  events1;
 
     int flag_wait=0;
+    int flag_first_velocity=1;
 
     cl::NDRange globalNDR(1,1,1);
     cl::NDRange localNDR(1,1,1);
@@ -393,6 +405,9 @@ void TF_CheckTransferOut::Run()
 
     //SetBuffer( td->pBufOut[0] );
     //SetBuffer( td->pBufOut[1] );
+
+    td->lastTime = td->startTime = time(NULL);
+
     for( ; ; )
     {
         if( this->m_isTerminate )
@@ -465,59 +480,59 @@ void TF_CheckTransferOut::Run()
             //eventCompletionExecuting0.wait();
 //            q.enqueueTask( td->krnl );
 //
-            if( flag_wait)
-             ret = eventCompletionExecuting1.wait();
-
-            SetBuffer( td->pBufOut[1] );
-            td->BlockWr++;
-
-            ret=q.enqueueWriteBuffer(
-                    *(td->pBuffer[1]),
-                    CL_FALSE,
-                    0,
-                    td->sizeBlock,
-                    td->pBufOut[1],
-                    NULL,
-                    &eventCompletionTransfer1
-                    );
-
-
-            {
-				ulong expect = td->dataExpect;
-				for( int jj=0; jj<8; jj++ )
-				{
-					arrayExpect.s[jj]=expect++;
-				}
-				td->dataExpect+=td->sizeBlock/8;
-            }
-
-            td->krnl.setArg( 0, *(td->pBuffer[1]) );
-            td->krnl.setArg( 1, *(td->dpStatus) );
-            td->krnl.setArg( 2, arrayExpect );
-            td->krnl.setArg( 3, sizeOfuint16 );
-
-            events1.clear();
-            events1.push_back( eventCompletionTransfer1 );
-
-
-
-            ret = q.enqueueNDRangeKernel(
-            		td->krnl,
-					offsetNDR,
-					globalNDR,
-					localNDR,
-					&events1,
-					//NULL,
-					&eventCompletionExecuting1
-
-					);
-
-					if( CL_SUCCESS != ret )
-					{
-						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
-					}
-
-
+//            if( flag_wait)
+//             ret = eventCompletionExecuting1.wait();
+//
+//            SetBuffer( td->pBufOut[1] );
+//            td->BlockWr++;
+//
+//            ret=q.enqueueWriteBuffer(
+//                    *(td->pBuffer[1]),
+//                    CL_FALSE,
+//                    0,
+//                    td->sizeBlock,
+//                    td->pBufOut[1],
+//                    NULL,
+//                    &eventCompletionTransfer1
+//                    );
+//
+//
+//            {
+//				ulong expect = td->dataExpect;
+//				for( int jj=0; jj<8; jj++ )
+//				{
+//					arrayExpect.s[jj]=expect++;
+//				}
+//				td->dataExpect+=td->sizeBlock/8;
+//            }
+//
+//            td->krnl.setArg( 0, *(td->pBuffer[1]) );
+//            td->krnl.setArg( 1, *(td->dpStatus) );
+//            td->krnl.setArg( 2, arrayExpect );
+//            td->krnl.setArg( 3, sizeOfuint16 );
+//
+//            events1.clear();
+//            events1.push_back( eventCompletionTransfer1 );
+//
+//
+//
+//            ret = q.enqueueNDRangeKernel(
+//            		td->krnl,
+//					offsetNDR,
+//					globalNDR,
+//					localNDR,
+//					&events1,
+//					//NULL,
+//					&eventCompletionExecuting1
+//
+//					);
+//
+//					if( CL_SUCCESS != ret )
+//					{
+//						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
+//					}
+//
+//
 
 
             flag_wait=1;
@@ -528,31 +543,43 @@ void TF_CheckTransferOut::Run()
 
         //eventCompletionExecuting0.wait();
 
-        clock_t currentTick = clock();
-        clock_t diff = currentTick - td->lastTick;
-        clock_t interval = 5*CLOCKS_PER_SEC;
-        if( diff > interval )
+//        clock_t currentTick = clock();
+//        clock_t diff = currentTick - td->lastTick;
+//        clock_t interval = 5*CLOCKS_PER_SEC;
+
+        time_t currentTime = time(NULL);
+        time_t timeFromStart = currentTime - td->startTime;
+        time_t diff = currentTime - td->lastTime;
+        td->testTime = timeFromStart;
+
+        if( diff >= 4 )
         {
-            double currentTime = (currentTick - td->lastTick);
-            currentTime /=CLOCKS_PER_SEC;
-            double velocity = ((td->BlockWr-td->lastBlock)*td->sizeBlock)/currentTime;
+            double velocity = (1.0L*(td->BlockWr-td->lastBlock)*td->sizeBlock)/diff;
 
-            td->VelocityCurrent = velocity / (1024*1024);
+            td->VelocityCurrent = velocity / (td->mbSize);
 
 
-//            currentTime = (currentTick - td->startTick);
-//            currentTime /=CLOCKS_PER_SEC;
-//            velocity = (td->BlockWr)*td->sizeBlock/currentTime;
+            velocity = 1.0L*(td->BlockWr)*td->sizeBlock/timeFromStart;
 
-            time_t timeFromStart = time(NULL) - td->startTime;
+            td->VelocityAverage = velocity / (td->mbSize);
 
-            velocity = (td->BlockWr)*td->sizeBlock/timeFromStart;
-
-            td->VelocityAverage = velocity / (1024*1024);
-
-            td->lastTick = currentTick;
+            td->lastTime = currentTime;
             td->lastBlock = td->BlockWr;
-            td->testTime = timeFromStart;
+
+            if( 1==flag_first_velocity )
+            {
+            	td->VelocityCurMax=td->VelocityCurrent;
+            	td->VelocityCurMin=td->VelocityCurrent;
+            	flag_first_velocity=0;
+            } else
+            {
+            	if( td->VelocityCurrent>td->VelocityCurMax )
+            		td->VelocityCurMax=td->VelocityCurrent;
+
+            	if( td->VelocityCurrent<td->VelocityCurMin )
+            		td->VelocityCurMin=td->VelocityCurrent;
+
+            }
         }
     }
 
@@ -631,7 +658,6 @@ void TF_CheckTransferOut::GetStatus( void )
             NULL,
             NULL
             );
-//    printf( "%s ret=%d \n", __FUNCTION__, ret );
 
 	td->Sig		   = td->pStatus[0];
 	td->BlockRd    = td->pStatus[1];

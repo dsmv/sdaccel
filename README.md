@@ -17,7 +17,7 @@ Qt may be used for more complex application but this project used same code for 
 There are three test class:
 * *TF_CheckTransferOut* - check data transfer from HOST to device
 * *TF_CheckTransferIn*  - check data transfer from device to HOST
-* *TF_CheckTransferInOut* - check data trnasfer for path: HOST-device-HOST
+* *TF_CheckTransferInOut* - check data transfer for path: HOST-device-HOST
 
 (only TF_CheckTransferOut is released now)
 
@@ -37,6 +37,11 @@ Arguments:
 * -table  <flag_show>	: 1 - show table, 0 -	do not show table, default 0
 * -time   <time> 	: execution time [s], default 10
 * -file	  <fullpath>	: fullpath for xclbin 
-* -size   <size>	: size block of bytes, default 65536
+* -size   <size>	: size block of megabytes, default 64
+* -metric <flag>	: 0 - binary:  1MB=2^10=1024*1024=1048576 bytes
+                          1 - decimal: 1MB=10^6=1000*1000=1000000 bytes
+
+Doxygen documentation: https://dsmv.github.io/sdaccel/check_transfer/index.html
+
 
 
