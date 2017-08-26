@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ASCII"?>
 <openclProject:OpenCLProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openclProject="http://www.xilinx.com/openclproject" name="check_transfer" location="/xprj/sdaccel/check_transfer/sdx_wsp/check_transfer" platform="xilinx:adm-pcie-ku3:2ddr-xpr:4.0" sysConfig="linux_x86" cpu="" os="linux">
   <configuration name="Emulation-CPU" id="com.xilinx.sdx.opencl.config.sw_emu.2002955441">
-    <configBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" reportType="Estimate">
+    <configBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
-    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" reportType="Estimate">
+    <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true">
       <binaryContainers name="binary_container_1">
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt" sourceFile="src/kernel/check_cnt.cl" maxMemoryPorts="true"/>

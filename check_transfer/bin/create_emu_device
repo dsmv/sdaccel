@@ -1,0 +1,1 @@
+emconfigutil --xdevice 'xilinx:adm-pcie-ku3:2ddr-xpr:4.0' --nd 1 --xp prop:solution.device_repo_path=/opt/Xilinx/ku3_dsa_2017.1-xpr
