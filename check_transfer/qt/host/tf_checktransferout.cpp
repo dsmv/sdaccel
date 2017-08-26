@@ -80,7 +80,7 @@ struct TF_CheckTransferOut_task_data {
 
       xclbinFileName = new char[512];
 
-      kernelName = "check_cnt";
+      kernelName = "check_cnt_m2a";
 
 
       pBufOut[0]=NULL;
