@@ -5,6 +5,7 @@ var searchData=
   ['cell_5ft',['cell_t',['../term__table_8h.html#adaed80185cbd8de932a3bb1ffc7acb02',1,'term_table.h']]],
   ['cell_5fwidth',['CELL_WIDTH',['../term__table_8h.html#ae1dbb0e959fde337fa4e436b61bb2bac',1,'term_table.h']]],
   ['check_5fcnt_2ecl',['check_cnt.cl',['../check__cnt_8cl.html',1,'']]],
+  ['check_5fcnt_5fm2_2ecl',['check_cnt_m2.cl',['../check__cnt__m2_8cl.html',1,'']]],
   ['checkbuffer',['CheckBuffer',['../classTF__CheckTransferOut.html#a20046ef355254980fb49cff676474706',1,'TF_CheckTransferOut']]],
   ['cl_5fhpp_5fcl_5f1_5f2_5fdefault_5fbuild',['CL_HPP_CL_1_2_DEFAULT_BUILD',['../xcl2_8hpp.html#a68d54dc532d47c93108cfcdf8c415e43',1,'xcl2.hpp']]],
   ['cl_5fhpp_5fenable_5fprogram_5fconstruction_5ffrom_5farray_5fcompatibility',['CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY',['../xcl2_8hpp.html#a7b62835f63d5abc084350dab1220e49b',1,'xcl2.hpp']]],

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['kernelname',['kernelName',['../structTF__CheckTransferOut__task__data.html#abed558d17b23ab8b8e65a9deeccc3818',1,'TF_CheckTransferOut_task_data']]],
-  ['krnl',['krnl',['../structTF__CheckTransferOut__task__data.html#ae15d2c4d75c8021922105418ce699805',1,'TF_CheckTransferOut_task_data']]]
+  ['info',['info',['../struct__except__info__t.html#a256dfa2996b1032c7d21bf943aef0218',1,'_except_info_t']]]
 ];

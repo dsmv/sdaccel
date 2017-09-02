@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['x',['x',['../struct__cell__t.html#a8d4f5dc07c2af06f61238576edb94d51',1,'_cell_t']]],
-  ['xclbinfilename',['xclbinFileName',['../structTF__CheckTransferOut__task__data.html#a04701fb1dafe60e7752068cc3e8ae4cd',1,'TF_CheckTransferOut_task_data']]]
+  ['velocityaverage',['VelocityAverage',['../structTF__CheckTransferOut__task__data.html#a2d77d41ca0ec3909b4beb3f820840c9b',1,'TF_CheckTransferOut_task_data']]],
+  ['velocitycurmax',['VelocityCurMax',['../structTF__CheckTransferOut__task__data.html#abefeb9d62960bec3be8493d78ef7c4d8',1,'TF_CheckTransferOut_task_data']]],
+  ['velocitycurmin',['VelocityCurMin',['../structTF__CheckTransferOut__task__data.html#af15e4f10b6018a2d60b6079fcdf1b396',1,'TF_CheckTransferOut_task_data']]],
+  ['velocitycurrent',['VelocityCurrent',['../structTF__CheckTransferOut__task__data.html#a908f9576e9f019e0e54fbfea7ca5ac23',1,'TF_CheckTransferOut_task_data']]]
 ];
