@@ -43,5 +43,10 @@ Arguments:
 
 Doxygen documentation: https://dsmv.github.io/sdaccel/check_transfer/index.html
 
+Project page: https://github.com/dsmv/sdaccel/projects/1
+
+Wiki: https://github.com/dsmv/sdaccel/wiki
+
+Deveopment Notes: https://github.com/dsmv/sdaccel/wiki/Development-Notes
 
 
