@@ -293,7 +293,7 @@ void TF_CheckTransferOut::PrepareInThread()
     	cl_int err0;
     	cl_int err1;
 
-    	cl_command_queue_properties properties0 = CL_QUEUE_PROFILING_ENABLE | CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
+    	cl_command_queue_properties properties0 = CL_QUEUE_PROFILING_ENABLE;
     	cl_command_queue_properties properties1 = CL_QUEUE_PROFILING_ENABLE | CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
 
     	td->q0 = new cl::CommandQueue(td->context, td->device, properties0, &err0 );
@@ -312,6 +312,21 @@ void TF_CheckTransferOut::PrepareInThread()
     		td->pStatus[ii]=0;
     	}
     	td->pStatus[0]=0xBB66;
+
+        cl_ulong val=td->dataOut;
+        cl_ulong *ptr = (cl_ulong *)&(td->pStatus[16]);
+
+    	// Set initial value
+    	for( int ii=0; ii<8; ii++ )
+    	{
+    		*ptr++ = val++;
+    	}
+
+    	// Set add const
+    	for( int ii=0; ii<8; ii++ )
+    	{
+    		*ptr++=8;
+    	}
 
 		cl_int ret=td->q0->enqueueWriteBuffer(
 				*(td->dpStatus),
@@ -439,16 +454,16 @@ void TF_CheckTransferOut::StartCalculateBuf( cl::Buffer *pDevice, cl::Event &eve
     cl::NDRange offsetNDR=cl::NullRange;
 
 
-	ulong expect = td->dataExpect;
-	for( int jj=0; jj<8; jj++ )
-	{
-		td->arrayExpect.s[jj]=expect++;
-	}
-	td->dataExpect+=td->sizeBlock/8;
+//	ulong expect = td->dataExpect;
+//	for( int jj=0; jj<8; jj++ )
+//	{
+//		td->arrayExpect.s[jj]=expect++;
+//	}
+//	td->dataExpect+=td->sizeBlock/8;
 
 	td->krnl_calculate.setArg( 0, *(td->dpStatus) );
-	td->krnl_calculate.setArg( 1, td->arrayExpect );
-	td->krnl_calculate.setArg( 2, td->sizeOfuint16 );
+	//td->krnl_calculate.setArg( 1, td->arrayExpect );
+	td->krnl_calculate.setArg( 1, td->sizeOfuint16 );
 
 	td->q1->enqueueNDRangeKernel(
 			td->krnl_calculate,
@@ -568,134 +583,7 @@ void TF_CheckTransferOut::Run()
 
         flag_wait=1;
 
-        //break;
 
-//        {
-//
-//            if( flag_wait)
-//            {
-//             ret = eventCompletionExecuting0.wait();
-//
-//            }
-//
-//            SetBuffer( td->pBufOut[0] );
-//            td->BlockWr++;
-//
-//            ret=q.enqueueWriteBuffer(
-//                    *(td->pBuffer[0]),
-//                    CL_FALSE,
-//                    0,
-//                    td->sizeBlock,
-//                    td->pBufOut[0],
-//                    NULL,
-//                    &eventCompletionTransfer0
-//                    );
-//
-//            {
-//				ulong expect = td->dataExpect;
-//				for( int jj=0; jj<8; jj++ )
-//				{
-//					arrayExpect.s[jj]=expect++;
-//				}
-//				td->dataExpect+=td->sizeBlock/8;
-//            }
-//
-//            td->krnl.setArg( 0, *(td->pBuffer[0]) );
-//            td->krnl.setArg( 1, *(td->dpStatus) );
-//            td->krnl.setArg( 2, arrayExpect );
-//            td->krnl.setArg( 3, sizeOfuint16 );
-//
-//            events0.clear();
-//            events0.push_back( eventCompletionTransfer0 );
-//
-//
-//
-//            ret = q.enqueueNDRangeKernel(
-//            		td->krnl,
-//					offsetNDR,
-//					globalNDR,
-//					localNDR,
-//					&events0,
-//					//NULL,
-//					&eventCompletionExecuting0
-//
-//					);
-//
-//					if( CL_SUCCESS != ret )
-//					{
-//						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
-//					}
-//
-//
-//            //eventCompletionExecuting0.wait();
-////            q.enqueueTask( td->krnl );
-////
-////            if( flag_wait)
-////             ret = eventCompletionExecuting1.wait();
-////
-////            SetBuffer( td->pBufOut[1] );
-////            td->BlockWr++;
-////
-////            ret=q.enqueueWriteBuffer(
-////                    *(td->pBuffer[1]),
-////                    CL_FALSE,
-////                    0,
-////                    td->sizeBlock,
-////                    td->pBufOut[1],
-////                    NULL,
-////                    &eventCompletionTransfer1
-////                    );
-////
-////
-////            {
-////				ulong expect = td->dataExpect;
-////				for( int jj=0; jj<8; jj++ )
-////				{
-////					arrayExpect.s[jj]=expect++;
-////				}
-////				td->dataExpect+=td->sizeBlock/8;
-////            }
-////
-////            td->krnl.setArg( 0, *(td->pBuffer[1]) );
-////            td->krnl.setArg( 1, *(td->dpStatus) );
-////            td->krnl.setArg( 2, arrayExpect );
-////            td->krnl.setArg( 3, sizeOfuint16 );
-////
-////            events1.clear();
-////            events1.push_back( eventCompletionTransfer1 );
-////
-////
-////
-////            ret = q.enqueueNDRangeKernel(
-////            		td->krnl,
-////					offsetNDR,
-////					globalNDR,
-////					localNDR,
-////					&events1,
-////					//NULL,
-////					&eventCompletionExecuting1
-////
-////					);
-////
-////					if( CL_SUCCESS != ret )
-////					{
-////						throw except_info( "%s - q.enqueueNDRangeKernel() - error  ret=%d ", __FUNCTION__, ret );
-////					}
-////
-////
-//
-//
-//            flag_wait=1;
-//
-////            if( CL_SUCCESS !=ret )
-////                td->BlockError++;
-//        }
-
-        //eventCompletionExecuting0.wait();
-
-//        clock_t currentTick = clock();
-//        clock_t diff = currentTick - td->lastTick;
-//        clock_t interval = 5*CLOCKS_PER_SEC;
 
         time_t currentTime = time(NULL);
         time_t timeFromStart = currentTime - td->startTime;

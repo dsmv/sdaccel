@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.3.1, 2017-08-27T17:38:39. -->
+<!-- Written by QtCreator 4.3.1, 2017-09-02T17:12:35. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{32bf32b0-fddd-4e4b-a33c-32450a451f49}</value>
+  <value type="QByteArray">{b4d0cf92-5ba8-42e2-9655-63ac02396424}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -120,7 +120,9 @@
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges">
+     <value type="QString">PATH=/opt/Qt5.9.1/5.9.1/gcc_64/bin:/opt/Xilinx/ku3_dsa_2017.1-xpr/xbinst/runtime/bin:/opt/rh/devtoolset-6/root/usr/bin:/usr/local/cuda/bin:/opt/Xilinx/ku3_dsa_2017.1-xpr/xbinst/runtime/bin:/opt/rh/devtoolset-6/root/usr/bin:/usr/local/cuda/bin:/opt/Xilinx/ku3_dsa_2017.1-xpr/xbinst/runtime/bin:/opt/rh/devtoolset-6/root/usr/bin:/usr/lib64/qt-3.3/bin:/home/user52/perl5/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/user52/.local/bin:/home/user52/bin</value>
+    </valuelist>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Debug</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
@@ -180,7 +182,9 @@
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges">
+     <value type="QString">PATH=/opt/Qt5.9.1/5.9.1/gcc_64/bin:/opt/Xilinx/ku3_dsa_2017.1-xpr/xbinst/runtime/bin:/opt/rh/devtoolset-6/root/usr/bin:/opt/rh/rh-git29/root/usr/bin:/usr/lib64/qt-3.3/bin:/home/user52/perl5/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/user52/.local/bin:/home/user52/bin</value>
+    </valuelist>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Release</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
@@ -302,7 +306,7 @@
      <value type="int">13</value>
      <value type="int">14</value>
     </valuelist>
-    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
+    <value type="int" key="PE.EnvironmentAspect.Base">1</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">check_transfer</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
