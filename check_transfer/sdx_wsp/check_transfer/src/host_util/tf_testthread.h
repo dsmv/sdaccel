@@ -16,6 +16,7 @@ class TableEngine;
 /**
  *	\brief	Base class for application with thread
  *
+ *  Class creates additional thread.
  *
  *
  */
@@ -36,10 +37,19 @@ public:
 
     void* Execute();
 
+    //! Prepare test
     virtual void PrepareInThread() = 0;
+
+    //! Free any resource
     virtual void CleanupInThread() = 0;
+
+    //! Show result
     virtual void GetResultInThread() = 0;
+
+    //! Show status information into test table
     virtual void StepTable() = 0;
+
+    //! Main body of user test
     virtual void Run() = 0;
 
 	int	m_isPrepareComplete;
@@ -56,11 +66,6 @@ public:
     pthread_t 			m_hThread;
     pthread_attr_t  	m_attrThread;
 
-    //! Get integer value from command line
-    static int GetFromCommnadLine(int argc, char **argv, const char* name, int defValue);
-
-    //! Get string value from command line
-    int GetStrFromCommnadLine(int argc, char **argv, const char* name, char* defValue, char* dst, int dstLen );
 
 };
 

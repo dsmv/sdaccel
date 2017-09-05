@@ -9,6 +9,6 @@ var searchData=
   ['f_5fwhite',['F_WHITE',['../term__table_8h.html#adef0c268dde9d7141995af9c26650ed8',1,'term_table.h']]],
   ['f_5fyellow',['F_YELLOW',['../term__table_8h.html#aecb7646e530924042cb9547210d5e806',1,'term_table.h']]],
   ['find_5fbinary_5ffile',['find_binary_file',['../namespacexcl.html#a054dd59407ed2a4480c4408e19c47740',1,'xcl']]],
-  ['flaggetstatus',['flagGetStatus',['../structTF__CheckTransferOut__task__data.html#a3784471500dccf3a52ecb8340cbeaaad',1,'TF_CheckTransferOut_task_data']]],
+  ['flaggetstatus',['flagGetStatus',['../structTF__CheckTransferIn__task__data.html#a24d22d52bfa332aa3c2f18c311940108',1,'TF_CheckTransferIn_task_data::flagGetStatus()'],['../structTF__CheckTransferOut__task__data.html#a3784471500dccf3a52ecb8340cbeaaad',1,'TF_CheckTransferOut_task_data::flagGetStatus()']]],
   ['flagtablecreate',['flagTableCreate',['../classTableEngineConsole.html#ac318601bc6771584b2073b593d4c53cf',1,'TableEngineConsole']]]
 ];

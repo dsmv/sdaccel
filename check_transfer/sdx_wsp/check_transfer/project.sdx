@@ -6,6 +6,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
     <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true">
@@ -13,6 +14,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>
@@ -22,6 +24,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
     <lastBuildOptions xsi:type="openclProject:OpenCLOptions" kernelDebug="true" reportType="System" target="hw_emu">
@@ -29,6 +32,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>
@@ -38,6 +42,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </configBuildOptions>
     <lastBuildOptions xsi:type="openclProject:OpenCLOptions" hardwareOptimizationLevel="O_2" reportType="System" target="hw">
@@ -45,6 +50,7 @@
         <kernels name="bandwidth" sourceFile="src/kernel/kernel.cl" maxMemoryPorts="true"/>
         <kernels name="check_cnt_m2a" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
         <kernels name="check_read_input" sourceFile="src/kernel/check_cnt_m2.cl" maxMemoryPorts="true" profilingType="Pipe Stalls"/>
+        <kernels name="gen_cnt" sourceFile="src/kernel/gen_cnt.cl" maxMemoryPorts="true"/>
       </binaryContainers>
     </lastBuildOptions>
   </configuration>

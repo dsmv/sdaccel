@@ -4,5 +4,5 @@ var searchData=
   ['xcl',['xcl',['../namespacexcl.html',1,'']]],
   ['xcl2_2ecpp',['xcl2.cpp',['../xcl2_8cpp.html',1,'']]],
   ['xcl2_2ehpp',['xcl2.hpp',['../xcl2_8hpp.html',1,'']]],
-  ['xclbinfilename',['xclbinFileName',['../structTF__CheckTransferOut__task__data.html#a04701fb1dafe60e7752068cc3e8ae4cd',1,'TF_CheckTransferOut_task_data']]]
+  ['xclbinfilename',['xclbinFileName',['../classTF__Device.html#a03a4ee6f709f40119d0b7fb13302590f',1,'TF_Device']]]
 ];

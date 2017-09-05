@@ -12,6 +12,6 @@ var searchData=
   ['m_5fresultstartmutex',['m_ResultStartMutex',['../classTF__TestThread.html#a744f656b6fc143e56c4b846f40a74510',1,'TF_TestThread']]],
   ['m_5fstartmutex',['m_StartMutex',['../classTF__TestThread.html#a1ad6411cf734262c0d8e58a763c88cfb',1,'TF_TestThread']]],
   ['m_5fthreadexitmutex',['m_ThreadExitMutex',['../classTF__TestThread.html#a5a2e444ad94b6665f2ee17794ff487f3',1,'TF_TestThread']]],
-  ['mbsize',['mbSize',['../structTF__CheckTransferOut__task__data.html#ad6606f32e3cb8d5b3b535ca594a48121',1,'TF_CheckTransferOut_task_data']]],
-  ['metricmode',['metricMode',['../structTF__CheckTransferOut__task__data.html#a588a0e2d74afee627aecce29e3ee0893',1,'TF_CheckTransferOut_task_data']]]
+  ['mbsize',['mbSize',['../structTF__CheckTransferIn__task__data.html#af4982803dcfde481620b341d1e7cfd54',1,'TF_CheckTransferIn_task_data::mbSize()'],['../structTF__CheckTransferOut__task__data.html#ad6606f32e3cb8d5b3b535ca594a48121',1,'TF_CheckTransferOut_task_data::mbSize()']]],
+  ['metricmode',['metricMode',['../structTF__CheckTransferIn__task__data.html#acad859758933f686b107a308699c1220',1,'TF_CheckTransferIn_task_data::metricMode()'],['../structTF__CheckTransferOut__task__data.html#a588a0e2d74afee627aecce29e3ee0893',1,'TF_CheckTransferOut_task_data::metricMode()']]]
 ];

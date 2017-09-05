@@ -1,14 +1,21 @@
-#ifndef TF_CHECKTRANSFER_H
-#define TF_CHECKTRANSFER_H
+#ifndef TF_CHECKTRANSFEROUT_H
+#define TF_CHECKTRANSFEROUT_H
 
-//#include "utypes.h"
+
 #include "xcl2.hpp"
 
 #include "tf_testthread.h"
 
 
+class TF_Device;
+
 struct TF_CheckTransferOut_task_data;
 
+/**
+ * 		\brief	check data transfer from device to host
+ *
+ *
+ */
 class TF_CheckTransferOut : public TF_TestThread
 {
 public:
@@ -16,7 +23,7 @@ public:
     //!< Internal data for TF_CheckTransferOut
     TF_CheckTransferOut_task_data  *td;
 
-    TF_CheckTransferOut(  TableEngine  *pTable, int argc, char** argv );
+    TF_CheckTransferOut(  TableEngine  *pTable, TF_Device  *pDevice, int argc, char** argv );
 
     ~TF_CheckTransferOut();
 
@@ -51,4 +58,4 @@ public:
 
 };
 
-#endif // TF_CHECKTRANSFER_H
+#endif // TF_CHECKTRANSFEROUT_H
