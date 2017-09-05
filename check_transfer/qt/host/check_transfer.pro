@@ -16,7 +16,10 @@ SOURCES += main.cpp \
     ../host_util/tf_testthread.cpp \
     ../host_util/ipc.cpp \
     tf_checktransferout.cpp \
-    ../host_util/xcl2.cpp
+    ../host_util/xcl2.cpp \
+    tf_checktransferin.cpp \
+    tf_device.cpp \
+    ../host_util/parse_cmd.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -41,7 +44,10 @@ HEADERS += \
     ../host_util/ipc.h \
     tf_checktransferout.h \
     ../host_util/utypes.h \
-    ../host_util/xcl2.hpp
+    ../host_util/xcl2.hpp \
+    tf_checktransferin.h \
+    tf_device.h \
+    ../host_util/parse_cmd.h
 # host compiler global settings
 #CXXFLAGS += -DSDX_PLATFORM=$(SDX_PLATFORM) -D__USE_XOPEN2K8 -I/opt/Xilinx/SDx/2017.1/runtime/include/1_2/ -I/opt/Xilinx/SDx/2017.1/Vivado_HLS/include/ -O2 -Wall -c -fmessage-length=0 -std=c++14
 #LDFLAGS += -lxilinxopencl -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64

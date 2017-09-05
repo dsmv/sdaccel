@@ -1,1 +1,2 @@
-./check_transfer -table 1 -time 20 -size 1024 -file ../sdx_wsp/check_transfer/System/binary_container_1.xclbin
+export XCL_EMULATON_MODE=false
+./check_transfer.exe -table 1 -time 20 -size 65536 -mode 3 -file ../sdx_wsp/check_transfer/System/binary_container_1.xclbin

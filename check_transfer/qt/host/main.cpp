@@ -12,6 +12,9 @@
 #include "table_engine_console.h"
 
 #include "tf_checktransferout.h"
+#include "tf_checktransferin.h"
+#include "tf_device.h"
+#include "parse_cmd.h"
 
 static volatile int exit_flag = 0;
 
@@ -29,11 +32,22 @@ void signal_handler(int signo)
  *
  * 	Arguments:
  *
+ *  main():
  *
- *
+ *  -mode   <mode>          : 1 - check input, 2 - check output, 3 - check input and output
  * 	-table	<flag_show>	  	: 1 - show table, 0 -	do not show table
  * 	-time   <time> 		  	: execution time [s],
- *	-mode	<n>				: 0 - Emulation-CPU, 1 - Emulation-HW, 2 - System
+ *
+ *
+ *  TF_Device:
+ *
+ *	-file 	<path>          : fullpath for xclbin, default "../binary_container_1.xclbin"
+ *
+ *  TF_CheckTransferIn & TF_CheckTransferOut:
+ *
+ *	-size	<n>             : size block of kilobytes, default 64
+ *	-metric <n>             : 0 - binary:  1MB=2^10=1024*1024=1048576 bytes,
+ *
  *
  */
 
@@ -44,6 +58,7 @@ int main(int argc, char **argv)
     int tableMode;
     int timeMode;
     long	testStartTime;
+    int		testMode;		   // 1 - input, 2 - output, 3 - input and output
 
     const char *headers[] = {
         "TIME", "BLOCK_WR", "BLOCK_RD", "BLOCK_OK", "BLOCK_ERROR", "SPD_CURRENT", "SPD_AVR",
@@ -51,30 +66,74 @@ int main(int argc, char **argv)
 
     TableEngine  *pTable = new TableEngineConsole();
 
-    tableMode = TF_TestThread::GetFromCommnadLine( argc, argv, "-table", 0 );
-    timeMode  = TF_TestThread::GetFromCommnadLine( argc, argv, "-time", 10 );
+
+
+    tableMode = GetFromCommnadLine( argc, argv, "-table", 0 );
+    timeMode  = GetFromCommnadLine( argc, argv, "-time", 10 );
+    testMode  = GetFromCommnadLine( argc, argv, "-mode",  2 );
+
 
     if( tableMode )
     	pTable->CreateTable(headers, sizeof(headers)/sizeof(headers[0]), 0);
 
+    printf( "\n\n\n\n"); //FIXME - it is need for output under table
 
     signal(SIGINT, signal_handler);
 
+    TF_Device	device( argc, argv );
+
+    TF_Test	*pTest[2];
+    int		testCnt=0;
+
     try {
 
+    	if( testMode & 2 )
+    	{
+          TF_CheckTransferOut *pTestOut = new TF_CheckTransferOut( pTable, &device, argc, argv );
+          pTest[testCnt++]=pTestOut;
+    	}
 
-        TF_CheckTransferOut *pTest = new TF_CheckTransferOut( pTable, argc, argv );
+    	if( testMode & 1 )
+    	{
+    	  TF_CheckTransferIn *pTestIn = new TF_CheckTransferIn( pTable, &device, argc, argv );
+          pTest[testCnt++]=pTestIn;
+    	}
 
-        for( int ii=0; ; ii++) {
-			if( pTest->Prepare(ii) )
+#if 0   // parallel executing prepare functions
+        for( int ii=0; ; ii++)
+        {
+        	int flagExit=1;
+        	for( int jj=0; jj<testCnt; jj++)
+        	{
+        		flagExit &=pTest[jj]->Prepare(ii);
+        	}
+			if( flagExit )
 				break;
 		}
+#else	// sequence executing prepare functions
 
+
+    	for( int jj=0; jj<testCnt; jj++)
+    	{
+        	int flagExit=1;
+            for( int ii=0; ; ii++)
+            {
+            	flagExit=pTest[jj]->Prepare(ii);
+            	if( flagExit )
+            		break;
+            }
+    	}
+#endif
 
         if( tableMode )
         	pTable->GetConsolePos(X,Y);
 
-		pTest->Start();
+    	for( int jj=0; jj<testCnt; jj++ )
+    	{
+    		pTest[jj]->Start();
+            IPC_delay(100); // FIXME
+
+    	}
 
 #if defined(IS_STEP_MAIN_THREAD)
         IPC_TIMEVAL start_time;
@@ -90,8 +149,10 @@ int main(int argc, char **argv)
             IPC_getTime(&start_time);
 
             for(;;) {
-                // Тестирование реализовано в функции StepMainThread()
-                pTest->StepMainThread();
+				for( int jj=0; jj<testCnt; jj++ )
+				{
+					pTest[jj]->StepMainThread();
+				}
                 IPC_getTime(&curr_time);
                 if(IPC_getDiffTime(&start_time, &curr_time) > 100) {
                     break;
@@ -99,7 +160,6 @@ int main(int argc, char **argv)
                 IPC_delay(10);
             }
 #else
-            // Тестирование реализовано в отдельном потоке
             IPC_delay(100);
 #endif
 
@@ -110,17 +170,31 @@ int main(int argc, char **argv)
 							exit_flag=2;
 				}
 
-                if( exit_flag ) {
-                    pTest->Stop();
+                if( exit_flag )
+                {
+    				for( int jj=0; jj<testCnt; jj++ )
+    				{
+    					pTest[jj]->Stop();
+    				}
+                }
+
+                int flagExit=1;
+				for( int jj=0; jj<testCnt; jj++ )
+				{
+					flagExit &= pTest[jj]->isComplete();
+				}
+
+				if( flagExit )
+					break;
 
 
-                if( pTest->isComplete() )
-                    break;
-
-            }
-
-             if( tableMode )
-            	 pTest->StepTable();
+				 if( tableMode )
+				 {
+					for( int jj=0; jj<testCnt; jj++ )
+					{
+					 pTest[jj]->StepTable();
+					}
+				 }
 
             ++count;
 
@@ -136,9 +210,16 @@ int main(int argc, char **argv)
         if( tableMode )
         	pTable->SetConsolePos(X, Y+1);
 
-        pTest->GetResult();
 
-		delete pTest; pTest=NULL;
+		for( int jj=0; jj<testCnt; jj++ )
+		{
+			pTest[jj]->GetResult();
+		}
+
+		for( int jj=0; jj<testCnt; jj++ )
+		{
+			delete pTest[jj]; pTest[jj]=NULL;
+		}
 
     } catch(except_info_t& err) {
         printf( "\n\n\n\n             \n%s\n", err.info.c_str());

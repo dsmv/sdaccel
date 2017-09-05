@@ -148,14 +148,14 @@ int TableEngineConsole::SetValueTable(unsigned nRow, unsigned nColumn, const cha
 
 //-----------------------------------------------------------------------------
 
-int TableEngineConsole::SetValueTable(unsigned nRow, unsigned nColumn, const char *pVal)
-{
-#if defined(__linux__)
-    SetValueTable(nRow, nColumn, "%s", pVal);
-#else
-#endif
-    return 0;
-}
+//int TableEngineConsole::SetValueTable(unsigned nRow, unsigned nColumn, const char *pVal)
+//{
+//#if defined(__linux__)
+//    SetValueTable(nRow, nColumn, "%s", pVal);
+//#else
+//#endif
+//    return 0;
+//}
 
 //-----------------------------------------------------------------------------
 

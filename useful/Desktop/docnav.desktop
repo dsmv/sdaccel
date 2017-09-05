@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=DocNav
+Comment=Xilinx Document Navigator
+Exec= /opt/Xilinx/run_docnav.sh
+Terminal=false
+Type=Application
+
+Name[en_US]=DocNav

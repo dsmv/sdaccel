@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=SDx
+Comment=Xilinx Sdx
+Exec= /opt/Xilinx/run_sdx.sh
+Terminal=false
+Type=Application
+
+Name[en_US]=SDx

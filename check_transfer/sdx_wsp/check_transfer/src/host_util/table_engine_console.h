@@ -16,7 +16,7 @@ public:
     int CreateTable(const char *pColumnName[], unsigned nCount, unsigned isTStudio);
     int AddRowTable();
     int SetValueTable(unsigned nRow, unsigned nColumn, const char *fmt, ...);
-    int SetValueTable(unsigned nRow, unsigned nColumn, const char *pVal);
+    //int SetValueTable(unsigned nRow, unsigned nColumn, const char *pVal);
     int SetValueTable(unsigned nRow, unsigned nColumn, signed nVal, const char* format="%d");
     int SetValueTable(unsigned nRow, unsigned nColumn, unsigned nVal, const char *format="%u");
     int SetValueTable(unsigned nRow, unsigned nColumn, float dVal, const char *format="%f");
