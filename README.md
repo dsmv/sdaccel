@@ -2,7 +2,7 @@
 
 ## check_transfer
 
-Program for check data transfer between host and Xilinx OpenCL device. I use ADM-PCIe-KU3 
+Program for check data transfer between host and Xilinx OpenCL device. 
   
 Directory:
 * *bin* - executable for QT application
@@ -14,18 +14,17 @@ There are two ways for build host application - Qt and SDAccell.
 SDAccel used for primary debug OpenCL kernel and create simple console application.
 Qt may be used for more complex application but this project used same code for Qt and SDAccel.
 
-There are three test class:
+There are two test class:
 * *TF_CheckTransferOut* - check data transfer from HOST to device
 * *TF_CheckTransferIn*  - check data transfer from device to HOST
-* *TF_CheckTransferInOut* - check data transfer for path: HOST-device-HOST
 
-(only TF_CheckTransferOut is released now)
 
 Program have two work mode:
 * with test table	- for direct launch and launch from Qt 
 * without test table	- for launch from SDAccel 
 
 Test table is a text table with status information:
+* *Time*    - name of test and test time
 * *BlockWr* - count of written blocks
 * *BlockRd* - count of read blocks
 * *BlockOk* - count of correct blocks
@@ -34,6 +33,7 @@ Test table is a text table with status information:
 * *SPD_AVR* - velocity of data transfer from test start
 
 Arguments:
+* -mode   <mode>        : 1 - check input, 2 - check output, 3 - check input and output
 * -table  <flag_show>	: 1 - show table, 0 -	do not show table, default 0
 * -time   <time> 	: execution time [s], default 10
 * -file	  <fullpath>	: fullpath for xclbin 
