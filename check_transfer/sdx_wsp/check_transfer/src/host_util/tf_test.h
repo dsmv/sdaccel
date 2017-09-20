@@ -24,6 +24,8 @@ public:
     {
         m_pTemplateEngine = pTable;
     }
+    
+    virtual ~TF_Test() {}
 
     //! Prepare test
     /**
