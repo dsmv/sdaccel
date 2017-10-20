@@ -120,6 +120,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/kernel}&quot;"/>
 									<listOptionValue builtIn="false" value="${env_var:XILINX_VIVADO_HLS}/include/"/>
 								</option>
+								<option id="com.xilinx.sdx.opencl.toolchain.hw.gcc_compiler.option.debug.1592925642" superClass="com.xilinx.sdx.opencl.toolchain.hw.gcc_compiler.option.debug" value="gnu.cpp.compiler.debugging.level.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.optimization.level.1966475372" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1811234610" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw.1347228236" name="SDx GCC Host Linker (x86_64)" superClass="com.xilinx.sdx.opencl.toolchain.gcc_linker.hw">

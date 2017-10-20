@@ -12,13 +12,17 @@ pipe uint p3_pipe  __attribute__((xcl_reqd_pipe_depth(512)));
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
 void input_stage(
-				__global uint    *src
+				__global uint    *src,
+				uint blockCount
 			  )
 {
-	__attribute__((xcl_pipeline_loop))
-    for (int ii = 0 ; ii < N_FFT ; ii++)
+	for( int jj=0; jj<blockCount; jj++ )
 	{
-		write_pipe_block( p0_pipe,  &src[ii] );
+		__attribute__((xcl_pipeline_loop))
+		for (int ii = 0 ; ii < N_FFT ; ii++)
+		{
+			write_pipe_block( p0_pipe,  &src[ii] );
+		}
 	}
 }
 
@@ -28,23 +32,29 @@ void input_stage(
  */
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
-void fp23_fft4096( uint mode )
+void fp23_fft4096( uint mode, uint blockCount )
 {
 	if( 0==mode )
 	{	// Skip data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val;
-			read_pipe_block( &val, p0_pipe );
-			write_pipe_block( p1_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val;
+				read_pipe_block( &val, p0_pipe );
+				write_pipe_block( p1_pipe,  &val );
+			}
 		}
 	} else
 	{
 		// Calculate data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val=0xA0000+ii;
-			write_pipe_block( p1_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val=0xA0000+ii;
+				write_pipe_block( p1_pipe,  &val );
+			}
 		}
 
 	}
@@ -55,24 +65,30 @@ void fp23_fft4096( uint mode )
  */
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
-void fp23_mult( uint mode )
+void fp23_mult( uint mode, uint blockCount )
 {
 	if( 0==mode )
 	{	// Skip data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val;
-			read_pipe_block( &val, p1_pipe );
-			write_pipe_block( p2_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val;
+				read_pipe_block( &val, p1_pipe );
+				write_pipe_block( p2_pipe,  &val );
 
+			}
 		}
 	} else
 	{
 		// Calculate data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val=0xB0000+ii;
-			write_pipe_block( p2_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val=0xB0000+ii;
+				write_pipe_block( p2_pipe,  &val );
+			}
 		}
 
 	}
@@ -84,23 +100,29 @@ void fp23_mult( uint mode )
  */
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
-void fp23_inv_fft4096( uint mode )
+void fp23_inv_fft4096( uint mode, uint blockCount )
 {
 	if( 0==mode )
 	{	// Skip data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val;
-			read_pipe_block( &val, p2_pipe );
-			write_pipe_block( p3_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val;
+				read_pipe_block( &val, p2_pipe );
+				write_pipe_block( p3_pipe,  &val );
+			}
 		}
 	} else
-	{write
+	{
 		// Calculate data
-		for( int ii=0; ii<N_FFT; ii++ )
+		for( int jj=0; jj<blockCount; jj++ )
 		{
-			uint val=0xC0000+ii;
-			write_pipe_block( p3_pipe,  &val );
+			for( int ii=0; ii<N_FFT; ii++ )
+			{
+				uint val=0xC0000+ii;
+				write_pipe_block( p3_pipe,  &val );
+			}
 		}
 
 	}
@@ -114,13 +136,16 @@ void fp23_inv_fft4096( uint mode )
 __kernel
 __attribute__ ((reqd_work_group_size(1,1,1)))
 void output_stage(
-				__global uint    *dst
+				__global uint    *dst, uint blockCount
 				)
 {
-	__attribute__((xcl_pipeline_loop))
-    for (int ii = 0 ; ii < N_FFT ; ii++)
+	for( int jj=0; jj<blockCount; jj++ )
 	{
-		read_pipe_block( &dst[ii], p3_pipe );
+		__attribute__((xcl_pipeline_loop))
+		for (int ii = 0 ; ii < N_FFT ; ii++)
+		{
+			read_pipe_block( &dst[ii], p3_pipe );
+		}
 	}
 }
 

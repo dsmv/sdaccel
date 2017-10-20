@@ -1,5 +1,5 @@
-//#ifndef TF_CHECKFFT_H
-#if 0
+#ifndef TF_CHECKFFT_H
+//#if 0
 #define TF_CHECKFFT_H
 
 
