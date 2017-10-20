@@ -25,6 +25,8 @@ public:
         m_pTemplateEngine = pTable;
     }
 
+    virtual ~TF_Test() {}
+
     //! Prepare test
     /**
      * \param cnt   number of call function
